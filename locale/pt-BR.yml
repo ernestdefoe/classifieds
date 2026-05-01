@@ -1,0 +1,124 @@
+flarum-classifieds:
+
+  admin:
+    settings:
+      tag_ids_label: Tags de classificados
+      tag_ids_help: "Escolha as tags cujas discussões devem se comportar como anúncios classificados. Discussões em qualquer uma das tags selecionadas ganharão campos de anúncio, controle de status e preço."
+      default_currency_label: Código da moeda padrão
+      default_currency_help: "Código ISO de 3 letras (ex.: USD, EUR, BRL)."
+      allowed_labels_label: Rótulos permitidos
+      allowed_labels_help: "Lista separada por vírgulas (ex.: iso,wtb,wts,trade)."
+      allow_price_range_label: Permitir faixa de preço
+      allow_price_range_help: Permite que usuários informem preço mínimo e máximo.
+      show_currency_symbol_label: Exibir símbolo da moeda
+      show_currency_symbol_help: "Mostra $/€/etc. em vez do código."
+      require_label_label: Exigir rótulo
+      require_price_label: Exigir preço
+      require_location_label: Exigir localização
+      auto_prune_days_label: Remover anúncios após N dias
+      auto_prune_days_help: "Remove anúncios mais antigos que N dias. 0 desativa."
+      auto_prune_sold_label: Remover anúncios vendidos
+      auto_prune_sold_help: "Quando a limpeza rodar, também remove anúncios vendidos/concluídos."
+
+    permissions:
+      mark_listing_sold_label: Marcar anúncios como vendido/ativo
+      bump_listing_label: Repostar (bump) próprio anúncio
+      edit_listing_label: Editar campos do próprio anúncio
+
+    edit_tag:
+      is_classifieds_label: Esta tag é uma tag de classificados
+      is_classifieds_help: Discussões nesta tag exigirão dados de anúncio.
+
+  forum:
+    composer:
+      section_title: Detalhes do anúncio
+      label_label: Tipo de anúncio
+      label_placeholder: Escolha um rótulo…
+      price_label: Preço
+      price_max_label: Preço máx. (faixa)
+      currency_label: Moeda
+      location_label: Localização
+      location_placeholder: Cidade, estado, país…
+      configure_listing_button: Configurar dados do anúncio
+
+    start_listing:
+      title: Novo anúncio
+      help: Esta discussão está numa tag de classificados. Preencha os dados do anúncio — você pode editar depois.
+      continue_button: Continuar
+
+    classifieds_composer:
+      title_placeholder: "Título do anúncio (ex.: iPhone 15 Pro 256GB)"
+      body_placeholder: "Descreva o anúncio: estado, detalhes, contato…"
+      label_required: Selecione um rótulo para o anúncio.
+      price_required: Informe um preço para o anúncio.
+      location_required: Informe a localização.
+
+    create_listing:
+      title: Novo anúncio
+      title_label: Título
+      description_label: Descrição
+      submit_button: Publicar anúncio
+      title_required: Informe um título.
+      description_required: Informe uma descrição.
+
+    edit_listing:
+      title: Editar anúncio
+      save_button: Salvar anúncio
+
+    discussion_controls:
+      mark_sold_button: Marcar como vendido
+      mark_active_button: Marcar como ativo
+      bump_button: Repostar anúncio
+      edit_listing_button: Editar anúncio
+
+    post_stream:
+      status_changed_sold_text: "{username} marcou o anúncio como vendido {time}."
+      status_changed_active_text: "{username} reabriu o anúncio {time}."
+      status_changed_completed_text: "{username} concluiu o anúncio {time}."
+      listing_bumped_text: "{username} repostou o anúncio {time}."
+
+    uploader:
+      title: Arraste fotos aqui ou clique para escolher
+      hint: "Até {max} fotos, JPG/PNG/GIF/WEBP de até 5MB cada."
+      add: Adicionar
+      remove: Remover
+      invalid_type: Alguns arquivos foram rejeitados — só imagens são aceitas.
+      too_large: Alguns arquivos foram rejeitados por excederem 5MB.
+
+    landing:
+      title: Classificados
+      greeting: "Olá, {username}!"
+      greeting_guest: Bem-vindo!
+      prompt: O que você gostaria de anunciar hoje?
+      select_category: "Selecionar categoria {name}"
+      empty: Nenhuma tag de classificados configurada ainda.
+      discussion_count: "{count, plural, =0{Nenhum anúncio ainda} one {1 anúncio} other {# anúncios}}"
+
+    breadcrumb:
+      classifieds: Classificados
+
+    actions:
+      contact_seller: Falar com o vendedor
+      login_to_contact: Entrar para falar com o vendedor
+      share: Compartilhar
+      copy_link: Copiar link
+      link_copied: Link copiado para a área de transferência.
+      copy_failed: Não foi possível copiar o link.
+
+    seller:
+      title: Vendedor
+      member_since: "Membro desde {time}"
+      listings: "{count, plural, =0{Nenhum anúncio} one {1 anúncio} other {# anúncios}}"
+      last_seen: "Visto {time}"
+
+  lib:
+    labels:
+      iso: ISO
+      wtb: WTB
+      wts: WTS
+      trade: TRADE
+
+    statuses:
+      active: Ativo
+      sold: Vendido
+      completed: Concluído

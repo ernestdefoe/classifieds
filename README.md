@@ -1,43 +1,44 @@
-# Flarum Classifieds
+# Flarum Classifieds (2.x)
 
-A Classifieds extension for [Flarum](http://flarum.org) forums
+A Classifieds extension for **Flarum 2.0** forums.
 
-_Author:_ [Jason Clemons](https://jasonclemons.me)
-_License:_ [MIT](https://github.com/forum/flarum-classifieds/blob/master/LICENSE)
-
-
-## Introduction
-
-Flarum Classifieds is an extension for [Flarum](http://flarum.org) forums that allows users to post classified advertisements in a defined forum tag. New posts in this tag have custom fields available to be completed by the poster before being publicly published. Users can also mark these posts as 'sold' or 'not sold'.
-
+Originally written for Flarum 0.1.0 by [Jason Clemons](https://jasonclemons.me); fully ported to the Flarum 2.0 architecture (extenders, JSON:API resources, declarative admin page, console scheduling).
 
 ## Features
 
-### USER FEATURES
+### User
+- Listing labels (ISO / WTB / WTS / TRADE) — fully configurable
+- Single price or price range with configurable currency code/symbol
+- Location field
+- Mark listing as **active**, **sold** or **completed** (event-post in the stream)
+- Bump (re-promote) listings, with event-post
+- Visual status (badge + dimmed list item)
+- Edit listing fields after creation (`Edit listing` modal)
 
-* Labels (ISO/WTB/WTS/TRADE)
-* Price or Price Range Field
-* Location
-* Image Attachments
-* Custom Secondary Tags only for 'Classifieds' Tag
-* Mark Post 'Sold' or 'Completed'
-* Sort By Active Status (Sold/Unsold)
-
-### ADMIN FEATURES
-
-* Create Classifieds Tag(s)
-* Set User Restrictions/Permissions
-* Auto-Prune Inactive/Sold Posts
-* Custom Post Templates
-
+### Admin
+- Per-tag opt-in: any tag can be flagged as a classifieds tag in the tag editor
+- Settings page: default currency, allowed labels, currency symbol, price-range toggle, required-fields toggles, auto-prune
+- Permissions: `discussion.markListingSold`, `discussion.bumpListing`, `discussion.editListing`
+- Auto-prune scheduled command: `php flarum classifieds:prune`
 
 ## Installation
 
-* [Download](https://github.com/forum/flarum-classifieds/releases/latest) the latest release, upload it to the `extensions` directory, and unzip the zip archive.
-* In your admin dashboard, go to the Extensions page and click 'Enable'.
-* You can configure options in the newly created tab on the left side.
+```bash
+composer require ramon/classifieds:*
+php flarum migrate
+php flarum cache:clear
+```
 
+Then enable the extension in the admin dashboard.
 
-## Support
+## Console
 
-Support for Flarum Classifieds will be offered through [Flarum.co](http://flarum.co). All bug reports must be submitted to the [GitHub Repository](https://github.com/forum/flarum-classifieds).
+```bash
+php flarum classifieds:prune --days=30 --dry-run
+```
+
+The command is also scheduled daily via `Extend\Console::schedule`.
+
+## License
+
+MIT — see [LICENSE](LICENSE).

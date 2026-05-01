@@ -1,0 +1,1265 @@
+// flarum-classifieds: forum styles
+
+@classifieds-iso:    #2196F3;
+@classifieds-wtb:    #FF9800;
+@classifieds-wts:    #4CAF50;
+@classifieds-trade:  #9C27B0;
+@classifieds-sold:   #9E9E9E;
+@classifieds-active: #15B715;
+
+.ClassifiedsLabel {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #fff;
+  line-height: 1.4;
+  background-color: var(--primary-color);
+
+  &--iso   { background-color: @classifieds-iso; }
+  &--wtb   { background-color: @classifieds-wtb; }
+  &--wts   { background-color: @classifieds-wts; }
+  &--trade { background-color: @classifieds-trade; }
+}
+
+// Inline TagLabel-style pill shown in DiscussionHero next to the tag pill.
+// Inherits all sizing/typography/border-radius from the native .TagLabel rule;
+// we only override the background (--tag-bg) per known label.
+.ClassifiedsTagLabel {
+  --tag-bg: var(--primary-color);
+
+  &--iso   { --tag-bg: @classifieds-iso; }
+  &--wtb   { --tag-bg: @classifieds-wtb; }
+  &--wts   { --tag-bg: @classifieds-wts; }
+  &--trade { --tag-bg: @classifieds-trade; }
+}
+
+.ClassifiedsListMeta-price {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(21, 183, 21, 0.12);
+  color: @classifieds-active;
+  font-weight: 600;
+}
+
+.ClassifiedsListMeta-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted-color);
+  font-size: 12px;
+
+  .icon {
+    font-size: 11px;
+  }
+}
+
+.ClassifiedsListItem {
+  &--sold,
+  &--completed {
+    .DiscussionListItem-content {
+      opacity: 0.65;
+    }
+    .DiscussionListItem-title {
+      text-decoration: line-through;
+    }
+  }
+}
+
+.Badge--classifieds-sold,
+.Badge--classifieds-completed {
+  --badge-bg: @classifieds-sold;
+  --badge-color: #fff;
+}
+
+// ─── Composer (compact, native Flarum tokens) ───────────────────────────
+
+.item-classifieds {
+  width: 100%;
+}
+
+.ClassifiedsComposer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 4px 0 6px;
+
+  &-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+  }
+
+  // Pills built on the native .Button component for consistent typography,
+  // focus rings, and dark-mode support without re-implementing the design.
+  &-pill {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--control-bg);
+    color: var(--control-color);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
+
+    &:hover { background: var(--control-bg-shaded, var(--control-bg)); }
+    &:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 1px; }
+
+    &.is-active {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    &--iso.is-active   { background: @classifieds-iso; }
+    &--wtb.is-active   { background: @classifieds-wtb; }
+    &--wts.is-active   { background: @classifieds-wts; }
+    &--trade.is-active { background: @classifieds-trade; }
+  }
+
+  &-required {
+    color: #e74c3c;
+    font-weight: 700;
+    font-size: 12px;
+    margin-left: 2px;
+  }
+
+  &-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    > .FormControl,
+    > .ClassifiedsComposer-priceInput {
+      height: 32px;
+    }
+
+    .FormControl {
+      padding: 4px 10px;
+      font-size: 13px;
+    }
+  }
+
+  // Compact price input with currency prefix on a small badge.
+  &-priceInput {
+    position: relative;
+    flex: 1 1 110px;
+    min-width: 100px;
+
+    .FormControl {
+      width: 100%;
+      padding-left: 32px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    &::before {
+      content: attr(data-symbol);
+      position: absolute;
+      left: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      min-width: 22px;
+      padding: 0 4px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      background: var(--control-bg-shaded, var(--control-bg));
+      color: var(--muted-color);
+      font-size: 11px;
+      font-weight: 700;
+      pointer-events: none;
+      line-height: 1;
+    }
+  }
+
+  &-currencyInput {
+    flex: 0 0 70px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  &-locationInput {
+    flex: 1 1 180px;
+    min-width: 140px;
+  }
+}
+
+.EditListingModal,
+.StartListingModal,
+.CreateListingModal {
+  .Form-group { margin-bottom: 12px; }
+
+  .required {
+    color: #e74c3c;
+    font-weight: 700;
+  }
+
+  textarea.FormControl {
+    min-height: 140px;
+    resize: vertical;
+  }
+}
+
+.ComposerBody--classifieds-discussion {
+  .ComposerBody-header {
+    .ClassifiedsComposer {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.DiscussionComposer-classifieds {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(21, 183, 21, 0.12);
+  color: @classifieds-active;
+  font-weight: 600;
+  font-size: 12px;
+
+  &:hover {
+    background: rgba(21, 183, 21, 0.2);
+  }
+}
+
+// ─── Image uploader (drop-zone + thumbs) ────────────────────────────────
+
+.ListingImageUploader {
+  width: 100%;
+  margin-bottom: 8px;
+
+  &-dropzone {
+    border: 2px dashed var(--control-bg-shaded, var(--control-bg));
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    background: var(--body-bg);
+
+    &:hover { border-color: var(--primary-color); }
+    &.is-dragover {
+      border-color: var(--primary-color);
+      background: rgba(21, 183, 21, 0.06);
+    }
+    &.is-disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 18px;
+    color: var(--muted-color);
+
+    > i { font-size: 28px; color: var(--primary-color); }
+  }
+
+  &-promptTitle {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text-color);
+  }
+
+  &-promptHint {
+    font-size: 12px;
+    color: var(--muted-color);
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+    gap: 8px;
+  }
+
+  &-thumb {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--control-bg);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    &--pending img { opacity: 0.7; }
+    &--pending.is-uploaded img { opacity: 1; }
+  }
+
+  &-thumbRemove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+
+    &:hover { background: rgba(231, 76, 60, 0.9); }
+  }
+
+  &-thumbPending {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 10px;
+  }
+
+  &-add {
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    background: var(--control-bg);
+    color: var(--muted-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border: 2px dashed transparent;
+
+    &:hover {
+      background: var(--control-bg-shaded, var(--control-bg));
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+  }
+
+  &-addLabel {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 700;
+  }
+
+  &-counter {
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--muted-color);
+    text-align: right;
+  }
+}
+
+// ─── Professional horizontal listing card on the discussion list ────────
+
+.olx-adcard.ClassifiedsListingCard {
+  background: var(--body-bg);
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: stretch;
+  column-gap: 16px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--control-bg-shaded, var(--control-bg));
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  min-height: 152px;
+  margin: 0 0 10px;
+  text-align: left;
+
+  &:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  &--sold,
+  &--completed {
+    opacity: 0.7;
+    .olx-adcard__title { text-decoration: line-through; }
+  }
+
+  // Content column (left of the media)
+  .olx-adcard__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+    padding: 2px 0;
+    gap: 8px;
+  }
+
+  .olx-adcard__topbody {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .olx-adcard__link {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: all;
+      z-index: 1;
+    }
+  }
+
+  .olx-adcard__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+    line-height: 1.35;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+  }
+
+  .olx-adcard__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  // Subtle, monochrome chip baseline — only label badges get color
+  .olx-core-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--control-bg);
+    color: var(--text-color);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    line-height: 1.6;
+  }
+
+  &-labelBadge {
+    background: var(--primary-color) !important;
+    color: #fff !important;
+
+    &--iso   { background: @classifieds-iso !important; }
+    &--wtb   { background: @classifieds-wtb !important; }
+    &--wts   { background: @classifieds-wts !important; }
+    &--trade { background: @classifieds-trade !important; }
+  }
+
+  &-statusBadge {
+    background: @classifieds-sold !important;
+    color: #fff !important;
+  }
+
+  // Price row — green primary, prominent
+  .olx-adcard__mediumbody {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .olx-adcard__price {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin: 0;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .olx-adcard__bottombody {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .olx-adcard__location-date {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: var(--muted-color);
+    font-size: 12px;
+  }
+
+  .olx-adcard__location {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+
+    > i {
+      font-size: 11px;
+      color: var(--muted-color);
+    }
+  }
+
+  .olx-adcard__date {
+    margin: 0;
+    position: relative;
+    padding-left: 11px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--muted-color);
+      opacity: 0.6;
+    }
+  }
+
+  // Media on the right
+  &-mediaWrap {
+    flex: 0 0 152px;
+  }
+
+  .olx-adcard__media {
+    background: var(--control-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    height: 100%;
+    min-height: 124px;
+    width: 152px;
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+  }
+
+  &:hover .olx-adcard__media img { transform: scale(1.04); }
+
+  // Subtle gradient on placeholder — better than flat gray
+  &-mediaPlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted-color);
+    font-size: 28px;
+    background:
+      linear-gradient(135deg, var(--control-bg), var(--control-bg-shaded, var(--control-bg)));
+
+    > i {
+      opacity: 0.4;
+    }
+  }
+
+  &-counter {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    pointer-events: none;
+    backdrop-filter: blur(2px);
+  }
+
+  @media (max-width: 540px) {
+    min-height: 120px;
+    padding: 10px;
+    column-gap: 12px;
+
+    &-mediaWrap { flex-basis: 108px; }
+    .olx-adcard__media { width: 108px; min-height: 100px; }
+    .olx-adcard__title { font-size: 14px; }
+    .olx-adcard__price { font-size: 17px; }
+    .olx-core-badge { font-size: 9px; padding: 2px 6px; }
+  }
+}
+
+// Disable the standard list-item hover background ONLY when our OLX card is
+// rendered (the card has its own hover treatment). Photoless listings fall
+// back to the regular row and keep Flarum's native hover.
+.DiscussionListItem.ClassifiedsListItem--withCard {
+  &:hover { background: transparent; }
+}
+
+// ─── Discussion hero (OLX-style 2-column layout) ────────────────────────
+
+.DiscussionHero--classifieds {
+  // Subtle tag-color tint: soft vertical fade overlaid on body bg, plus a
+  // thin accent line at the top. `--classifieds-tint` is set inline by the
+  // JS to the classifieds tag's color (falls back to primary).
+  --classifieds-tint: var(--primary-color);
+
+  position: relative;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--classifieds-tint) 8%, transparent) 0%,
+      color-mix(in srgb, var(--classifieds-tint) 2%, transparent) 60%,
+      transparent 100%
+    ),
+    var(--body-bg) !important;
+  color: var(--text-color);
+  padding: 24px 0 !important;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--classifieds-tint) 18%, var(--control-bg-shaded, var(--control-bg)));
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--classifieds-tint);
+    opacity: 0.55;
+  }
+}
+
+.ClassifiedsHero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+
+  &-gallery {
+    min-width: 0;
+  }
+
+  &-noImage {
+    width: 100%;
+    height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--control-bg);
+    border-radius: 12px;
+    color: var(--muted-color);
+    font-size: 32px;
+  }
+
+  // No flex gap on the info column — control vertical rhythm explicitly
+  // per element below for a tighter, more deliberate hierarchy.
+  &-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    text-align: left; // override the center alignment Flarum's .Hero applies
+    align-items: stretch;
+  }
+
+  // Posted-at small caption above the price (date in OLX top of right col)
+  &-postedAt {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted-color);
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 10px;
+
+    > i { font-size: 11px; }
+  }
+
+  // Title as the page heading — big and bold
+  &-title {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-color);
+    margin: 0 0 8px;
+    word-wrap: break-word;
+    text-align: left;
+  }
+
+  // Price as a strong secondary anchor in primary color
+  &-price {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary-color);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+
+  // Compact row of tag/label/status chips
+  &-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 14px;
+
+    .TagsLabel,
+    .TagLabel { margin: 0; }
+  }
+
+  &-statusBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: @classifieds-sold;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  // Single-line location row
+  &-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-color);
+    font-size: 14px;
+    margin-bottom: 16px;
+
+    > i {
+      color: var(--primary-color);
+      font-size: 13px;
+      width: 14px;
+      text-align: center;
+    }
+  }
+
+  // Horizontal divider between actions and seller card
+  &-divider {
+    height: 1px;
+    background: var(--control-bg-shaded, var(--control-bg));
+    margin: 18px 0;
+  }
+
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+
+    &-title { font-size: 18px; }
+    &-price { font-size: 26px; }
+  }
+}
+
+// Breadcrumb
+.ClassifiedsBreadcrumb {
+  margin-bottom: 16px;
+
+  &-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 4px;
+  }
+
+  &-item {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  &-link {
+    color: var(--text-color);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+  }
+
+  &-current {
+    color: var(--muted-color);
+    font-weight: 400;
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &-sep {
+    margin: 0 6px;
+    color: var(--muted-color);
+    font-size: 9px;
+  }
+}
+
+// Action buttons (contact / share / favorite)
+.ClassifiedsActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+
+  &-primary {
+    flex: 1;
+    min-width: 220px;
+    height: 44px;
+    padding: 0 18px !important;
+    font-weight: 700 !important;
+    border-radius: 999px !important;
+    font-size: 14px !important;
+  }
+
+  &-secondary {
+    display: flex;
+    gap: 6px;
+  }
+
+  &-iconBtn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50% !important;
+    background: var(--control-bg) !important;
+    color: var(--text-color) !important;
+    border: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: var(--control-bg-shaded, var(--control-bg)) !important;
+    }
+  }
+}
+
+// Seller card — clean, no border (divider above provides separation)
+.ClassifiedsSellerCard {
+  background: transparent;
+  text-align: left;
+
+  &, * { text-align: left; }
+
+  &-header {
+    margin-bottom: 12px;
+  }
+
+  &-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--muted-color);
+  }
+
+  &-body {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none !important;
+    color: inherit;
+    padding: 4px 0;
+
+    &:hover {
+      text-decoration: none;
+      .ClassifiedsSellerCard-name { color: var(--primary-color); }
+    }
+  }
+
+  &-avatar {
+    --size: 56px;
+    width: 56px;
+    height: 56px;
+    flex: 0 0 56px;
+  }
+
+  &-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    min-width: 0;
+    flex: 1;
+    text-align: left;
+  }
+
+  &-name {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-color);
+    transition: color 0.15s ease;
+    line-height: 1.2;
+    margin-bottom: 2px;
+    text-align: left;
+
+    .username { display: inline; }
+  }
+
+  &-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted-color);
+    font-size: 12px;
+    line-height: 1.4;
+
+    > i {
+      font-size: 10px;
+      width: 12px;
+      text-align: center;
+      color: var(--muted-color);
+    }
+
+    &--online { color: @classifieds-active; }
+  }
+
+  &-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: @classifieds-active;
+    display: inline-block;
+    box-shadow: 0 0 0 3px fade(@classifieds-active, 18%);
+  }
+}
+
+// ─── Discussion page tweaks for classifieds (Description + Comments) ────
+
+.App--classifieds {
+  .DiscussionPage-stream {
+    max-width: 1100px;
+    margin: 24px auto 0;
+    padding: 0 16px;
+  }
+
+  // Hide the post stream scrubber — OLX-style pages don't need it
+  .DiscussionPage-nav .item-scrubber { display: none; }
+
+  // First post = product description card
+  .PostStream-item[data-number="1"] {
+    .CommentPost {
+      background: var(--body-bg);
+      border: 1px solid var(--control-bg-shaded, var(--control-bg));
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .CommentPost::before {
+      content: 'Descrição';
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-color);
+    }
+
+    .Post-header { display: none; } // hide author header on description
+  }
+
+  // Replies header (renders before second item via the data attribute)
+  .PostStream-item[data-number="2"]::before {
+    content: 'Comentários e dúvidas';
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 8px 0 16px;
+  }
+}
+
+// ─── Photo carousel (used inside the hero gallery column) ───────────────
+
+.ClassifiedsHeroCarousel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &-frame {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    max-height: 50vh;
+    background: var(--control-bg);
+    border-radius: 10px;
+    overflow: hidden;
+
+    picture {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: var(--control-bg);
+    }
+  }
+
+  &-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 0;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease, background 0.15s ease;
+    font-size: 12px;
+
+    &--prev { left: 8px; }
+    &--next { right: 8px; }
+    &:hover { background: rgba(0, 0, 0, 0.8); }
+  }
+
+  &-frame:hover &-nav,
+  &:focus-within &-nav {
+    opacity: 1;
+  }
+
+  &-bullets {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 999px;
+  }
+
+  &-bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &.is-active { background: #fff; }
+  }
+
+  &-counter {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  &-thumbs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 2px;
+    scrollbar-width: thin;
+  }
+
+  &-thumb {
+    flex: 0 0 56px;
+    height: 56px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    background: var(--control-bg);
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.7;
+    transition: opacity 0.15s ease, border-color 0.15s ease;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    &:hover { opacity: 1; }
+    &.is-active {
+      border-color: var(--primary-color);
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 540px) {
+    &-frame { height: 240px; }
+    &-thumb { flex-basis: 48px; height: 48px; }
+  }
+}
+
+// ─── Landing page (/classifieds) — macro-categorias estilo OLX ──────────
+
+.ClassifiedsLanding {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 760px;
+  margin: 24px auto;
+  padding: 0 16px;
+
+  &-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &-greeting,
+  &-prompt {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.18;
+    color: var(--text-color);
+  }
+
+  &-greeting { color: var(--muted-color); }
+
+  &-empty {
+    color: var(--muted-color);
+    text-align: center;
+    padding: 32px;
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+  }
+
+  &-card {
+    --tag-color: var(--primary-color);
+
+    grid-column: span 2;
+    background: var(--control-bg);
+    border-radius: 16px;
+    padding: 16px;
+    height: 152px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: var(--text-color);
+    text-decoration: none;
+    border: 1px solid transparent;
+
+    &:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      border-color: var(--tag-color);
+      text-decoration: none;
+    }
+
+    &--0,
+    &--1 { grid-column: span 3; }
+  }
+
+  &-cardIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--tag-color);
+    color: #fff;
+    font-size: 20px;
+    box-shadow: 0 2px 6px fade(#000, 12%);
+  }
+
+  &-cardBody {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &-cardTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  &-cardSubtitle {
+    font-size: 13px;
+    color: var(--muted-color);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  @media (max-width: 720px) {
+    &-grid { grid-template-columns: repeat(2, 1fr); }
+    &-card,
+    &-card--0,
+    &-card--1 { grid-column: span 1; }
+    &-greeting, &-prompt { font-size: 22px; }
+  }
+}

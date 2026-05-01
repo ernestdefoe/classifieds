@@ -1,26 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep -o Post--byCurrentUser[^}]*} e:/laragon/www/flarum/vendor/flarum/messages/js/dist/forum.js)",
-      "Bash(find e:/laragon/www/flarum/vendor/flarum/messages -name *.css)",
-      "Bash(ls \"c:/laragon/bin/php/php-8.3.16-Win32-vs16-x64/\"*.exe)",
+      "Bash(/c/laragon/bin/php/php-8.3.16-Win32-vs16-x64/php.exe composer.phar dump-autoload --no-scripts)",
+      "Bash(/c/laragon/bin/composer/composer.phar dump-autoload:*)",
+      "Bash(/c/laragon/bin/php/php-8.3.16-Win32-vs16-x64/php.exe /c/laragon/bin/composer/composer.phar dump-autoload --no-scripts)",
       "Read(//c/Program Files/**)",
-      "Bash(cmd.exe /c \"where php\")",
-      "Bash(cmd.exe /c \"dir /b E:\\\\laragon\\\\bin\")",
-      "Bash(/e/laragon/bin/php/php-8.3.8-nts-Win32-vs16-x64/php.exe flarum:*)",
-      "Bash(/e/laragon/bin/php/php-8.5.4-nts-Win32-vs17-x64/php.exe flarum:*)",
-      "Bash(grep -o \"this\\\\.loading.\\\\{0,200\\\\}\" /e/laragon/www/flarum/public/assets/js/ramon-avocado/forum/components/AllDiscussionsPage.js)",
-      "Bash(grep -o \"AvocadoHome-threadStack.\\\\{0,300\\\\}\" /e/laragon/www/flarum/vendor/ramon/avocado/js/dist/forum.js)",
-      "Bash(grep -o \"AvocadoHome-section.\\\\{0,500\\\\}\" /e/laragon/www/flarum/vendor/ramon/avocado/js/dist/forum.js)",
-      "Bash(grep -o \"threadStack.\\\\{0,300\\\\}\")",
-      "Bash(grep -o \"_homeLoading.\\\\{0,200\\\\}\" /e/laragon/www/flarum/vendor/ramon/avocado/js/dist/forum.js)",
-      "Bash(grep -o \"_homeLoading.\\\\{0,100\\\\}\" /e/laragon/www/flarum/public/assets/forum.js)",
-      "Bash(git ls-tree:*)",
-      "Bash(grep -n \"renderDiscSkeleton\\\\|renderThreadSkeleton\\\\|renderPostSkeleton\" \"/e/laragon/www/flarum/workbench/avocado-v2/js/src/forum/components\"/*.tsx)",
-      "Bash(grep -n \"AvocadoSearch-postSkeleton\\\\|AvocadoSearch-stack\\\\|AvocadoSearch-postStack\" \"/e/laragon/www/flarum/workbench/avocado-v2/less/forum\"/*.less)",
-      "Bash(node node_modules/.bin/webpack --mode production)",
-      "Bash(node_modules/.bin/webpack.cmd --mode production)",
-      "Bash(node -e ':*)"
+      "Bash(\"/c/laragon/bin/php/php-8.3.16-Win32-vs16-x64/php.exe\" flarum:*)"
     ]
   }
 }

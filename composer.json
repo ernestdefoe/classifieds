@@ -1,8 +1,59 @@
 {
+    "name": "ramon/classifieds",
+    "description": "Custom classified-ads composer, OLX-style listing pages and per-tag classifieds support for Flarum.",
+    "type": "flarum-extension",
+    "keywords": [
+        "flarum",
+        "classifieds",
+        "ads",
+        "marketplace",
+        "discussion"
+    ],
+    "license": "MIT",
+    "require": {
+        "flarum/core": "^2.0.0-rc.1"
+    },
+    "require-dev": {
+        "flarum/tags": "^2.0",
+        "flarum/testing": "^2.0"
+    },
+    "authors": [
+        {
+            "name": "Ramon Guilherme",
+            "email": "ramon@ramonguilherme.com.br",
+            "homepage": "https://ramonguilherme.com.br",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ram0ng1/classifieds/issues",
+        "source": "https://github.com/ram0ng1/classifieds"
+    },
+    "homepage": "https://github.com/ram0ng1/classifieds",
     "autoload": {
         "psr-4": {
             "Flarum\\Classifieds\\": "src/"
         }
-    }
-  }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Flarum\\Classifieds\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "2.x-dev"
+        },
+        "flarum-extension": {
+            "title": "Classifieds",
+            "category": "feature",
+            "icon": {
+                "name": "fas fa-tag",
+                "backgroundColor": "#15B715",
+                "color": "#fff"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
