@@ -186,6 +186,30 @@ class DiscussionResourceFields
      * Used where a wrong answer loses data, unlike the serializer's getter,
      * where a cached relation is both correct and cheap.
      */
+    /**
+     * True only when this discussion is known to carry tags, none of which is a
+     * classifieds tag.
+     *
+     * 🚨 Not the negation of isClassifieds(). A discussion whose tags are not
+     * attached yet answers FALSE here and TRUE there, and that difference is the
+     * whole bug this exists to avoid.
+     */
+    protected function isDefinitelyNotClassifieds(Discussion $discussion): bool
+    {
+        if (! $discussion->exists) {
+            return false;
+        }
+
+        $discussion->unsetRelation('tags');
+        $tags = $discussion->tags;
+
+        if ($tags->isEmpty()) {
+            return false;
+        }
+
+        return ! $tags->contains(fn ($tag) => (bool) ($tag->is_classifieds ?? false));
+    }
+
     protected function isClassifiedsFresh(Discussion $discussion): bool
     {
         if ($discussion->exists) {
@@ -356,15 +380,22 @@ class DiscussionResourceFields
          * touch the same save. One extra query on save is the whole cost.
          */
         /*
-         * 🚨 The stash is consumed AFTER this check, never before.
+         * 🚨 Skip only on positive DISPROOF — never on absent evidence.
          *
-         * A discussion is saved more than once while it is being created, and
-         * the tags are not attached on the first of those. Consuming the stash
-         * first would throw the listing away on an early save and leave nothing
-         * for the save that finally sees the tags — the same silent data loss,
-         * one layer down.
+         * This guard used to demand proof that the discussion is a classifieds
+         * one, and at creation that proof cannot exist yet: flarum-tags attaches
+         * the tags after every save of the discussion, so instrumenting a live
+         * request showed persist() entered three times, each one finding no tags
+         * and returning, and the advert posted with no price, label or seat
+         * details and no error anywhere.
+         *
+         * Nothing is protected by requiring proof here. These fields are only
+         * writable through this resource, so a client that sends them is saying
+         * what it wants; a row written for a discussion that turns out not to be
+         * classifieds is inert, because every reader checks the tag. Losing the
+         * seller's data is the expensive mistake, not keeping a spare row.
          */
-        if (! $this->isClassifiedsFresh($discussion)) {
+        if ($this->isDefinitelyNotClassifieds($discussion)) {
             return;
         }
 
