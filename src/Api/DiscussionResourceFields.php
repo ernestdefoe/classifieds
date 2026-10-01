@@ -31,6 +31,9 @@ class DiscussionResourceFields
      */
     protected static ?WeakMap $stash = null;
 
+    /** Whether the model-event fallback is registered in this process. */
+    protected static bool $hooked = false;
+
     public function __construct(
         protected SettingsRepositoryInterface $settings,
         protected ListingValidator $validator,
@@ -269,27 +272,69 @@ class DiscussionResourceFields
 
         $entry['stash'] = array_merge($entry['stash'], $changes);
 
+        $entry['actor'] = $entry['actor'] ?? $context->getActor();
+
         if (! $entry['registered']) {
             $entry['registered'] = true;
-            $actor = $context->getActor();
+            $actor = $entry['actor'];
 
             $discussion->afterSave(function (Discussion $discussion) use ($actor) {
                 $this->persist($discussion, $actor);
             });
+
+            /*
+             * 🚨 And a model-event fallback, because afterSave does not fire
+             * everywhere.
+             *
+             * On fbsfb an advert posted through the composer produced a
+             * correctly tagged discussion with no price, label or seat details
+             * and no error anywhere. Instrumenting the live request showed all
+             * six fields staged, afterSave REGISTERED on object 1609 — and
+             * Eloquent's own `saved` firing on that very same object while the
+             * afterSave callback never ran. Which of the sixty-odd installed
+             * extensions swallows it does not matter: a data path that silently
+             * depends on one is the bug.
+             *
+             * Eloquent's event was measured firing on the right instance, so
+             * that is what this hangs on. Both paths call persist(), and
+             * persist() consumes the stash only once, so a double fire is a
+             * no-op rather than a duplicate listing.
+             */
+            static::hookModelEvent();
         }
 
         $map[$discussion] = $entry;
+    }
+
+    /**
+     * Flush any staged listing when a discussion is saved.
+     *
+     * Registered once per process. The handler looks the stash up by model
+     * instance, so a discussion nothing staged costs one lookup.
+     */
+    protected static function hookModelEvent(): void
+    {
+        if (static::$hooked) {
+            return;
+        }
+
+        static::$hooked = true;
+
+        Discussion::saved(function (Discussion $discussion) {
+            $entry = static::stashMap()[$discussion] ?? null;
+
+            if ($entry === null || empty($entry['stash']) || empty($entry['actor'])) {
+                return;
+            }
+
+            resolve(static::class)->persist($discussion, $entry['actor']);
+        });
     }
 
     protected function persist(Discussion $discussion, User $actor): void
     {
         $map = static::stashMap();
         $entry = $map[$discussion] ?? null;
-
-        if ($entry !== null) {
-            unset($map[$discussion]);
-        }
-
         $stash = $entry['stash'] ?? null;
 
         if (! $stash) {
@@ -310,9 +355,20 @@ class DiscussionResourceFields
          * did not reproduce on the demo and did on fbsfb, where more extensions
          * touch the same save. One extra query on save is the whole cost.
          */
+        /*
+         * 🚨 The stash is consumed AFTER this check, never before.
+         *
+         * A discussion is saved more than once while it is being created, and
+         * the tags are not attached on the first of those. Consuming the stash
+         * first would throw the listing away on an early save and leave nothing
+         * for the save that finally sees the tags — the same silent data loss,
+         * one layer down.
+         */
         if (! $this->isClassifiedsFresh($discussion)) {
             return;
         }
+
+        unset($map[$discussion]);
 
         $listing = $discussion->listing()->first() ?? new Listing();
         $listing->discussion_id = $discussion->id;
