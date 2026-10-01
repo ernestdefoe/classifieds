@@ -10,6 +10,10 @@ declare module 'flarum/common/models/Discussion' {
     listingPriceMax(): number | string | null;
     listingCurrency(): string | null;
     listingLocation(): string | null;
+    listingSection(): string | null;
+    listingRow(): string | null;
+    listingSeats(): string | null;
+    listingSeatDisplay(): string | null;
     listingSoldAt(): Date | null;
     listingBumpedAt(): Date | null;
     listingImages(): string[];

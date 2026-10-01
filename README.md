@@ -143,3 +143,30 @@ The command is also scheduled to run **daily** automatically via `Extend\Console
 ## License
 
 [MIT](LICENSE)
+
+---
+
+## This is a fork
+
+Forked from [ram0ng1/classifieds](https://github.com/ram0ng1/classifieds) by
+Ramon Guilherme, MIT. His copyright notice stays in `LICENSE` and his authorship
+stays in `composer.json` — the fork adds to his work, it does not replace it.
+
+### What the fork adds
+
+**Section, row and seats** on a listing, for ticket ads.
+
+🚨 All three are stored as **strings**. A section is "C", "114" or "Upper 320";
+a row is "AA" as often as "12"; and seats are a list or a range — "4-7",
+"12, 14". Typing any of them as a number loses the real value and silently
+stores 0 for the ones that are not numeric at all.
+
+The composer only shows these when the listing looks like tickets — three empty
+boxes on an ad for a sofa is three more things to read past — but it shows them
+whenever any of the three already has a value, so a field can never disappear
+while still holding data somebody needs to clear.
+
+### Still to come
+
+A stadium map with a seat locator, so a listing can show where the seats
+actually are.

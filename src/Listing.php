@@ -65,10 +65,42 @@ class Listing extends AbstractModel
         'price_max',
         'currency',
         'location',
+        'section',
+        'row',
+        'seats',
         'sold_at',
         'bumped_at',
         'screenshots',
     ];
+
+    /**
+     * "Section 114, Row 12, Seats 4-7" — only the parts that were filled in.
+     *
+     * 🚨 Returns null rather than an empty string when there is nothing, so a
+     * template can test it directly instead of rendering an empty line with a
+     * ticket icon beside it.
+     */
+    public function seatDisplay(): ?string
+    {
+        $parts = [];
+
+        if (filled($this->section)) {
+            $parts[] = 'Section '.$this->section;
+        }
+        if (filled($this->row)) {
+            $parts[] = 'Row '.$this->row;
+        }
+        if (filled($this->seats)) {
+            $parts[] = 'Seats '.$this->seats;
+        }
+
+        return $parts ? implode(', ', $parts) : null;
+    }
+
+    public function hasSeatInfo(): bool
+    {
+        return filled($this->section) || filled($this->row) || filled($this->seats);
+    }
 
     public function imageUrls(): array
     {

@@ -38,6 +38,9 @@ function ensureListingState(composer: any): ListingFields {
       priceMax: '',
       currency: '',
       location: '',
+      section: '',
+      row: '',
+      seats: '',
     };
   }
   return composer.fields.listing;
@@ -84,6 +87,9 @@ export default function addListingComposer(): void {
     data.listingPriceMax = listing.priceMax === '' || listing.priceMax == null ? null : listing.priceMax;
     data.listingCurrency = listing.currency || null;
     data.listingLocation = listing.location || null;
+    data.listingSection = listing.section || null;
+    data.listingRow = listing.row || null;
+    data.listingSeats = listing.seats || null;
 
     return data;
   });

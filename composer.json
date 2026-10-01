@@ -1,6 +1,6 @@
 {
-    "name": "ramon/classifieds",
-    "description": "Custom classified-ads composer, OLX-style listing pages and per-tag classifieds support for Flarum.",
+    "name": "ernestdefoe/classifieds",
+    "description": "Classified ads for Flarum, with section/row/seat details and a stadium seat locator for ticket listings. A fork of ramon/classifieds.",
     "type": "flarum-extension",
     "keywords": [
         "flarum",
@@ -23,11 +23,16 @@
             "email": "ramon@ramonguilherme.com.br",
             "homepage": "https://ramonguilherme.com.br",
             "role": "Developer"
+        },
+        {
+            "name": "ernestdefoe",
+            "email": "ernestdefoe@gmail.com",
+            "role": "Fork maintainer"
         }
     ],
     "support": {
-        "issues": "https://github.com/ram0ng1/classifieds/issues",
-        "source": "https://github.com/ram0ng1/classifieds"
+        "issues": "https://github.com/ernestdefoe/classifieds/issues",
+        "source": "https://github.com/ernestdefoe/classifieds"
     },
     "homepage": "https://github.com/ram0ng1/classifieds",
     "autoload": {
@@ -45,7 +50,7 @@
             "dev-main": "2.x-dev"
         },
         "flarum-extension": {
-            "title": "Classifieds",
+            "title": "Classifieds (Seats)",
             "category": "feature",
             "icon": {
                 "name": "fas fa-tag",

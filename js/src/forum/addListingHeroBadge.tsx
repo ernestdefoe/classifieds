@@ -50,6 +50,7 @@ export default function addListingHeroBadge(): void {
       discussion.listingCurrency()
     );
     const location = discussion.listingLocation();
+    const seatDisplay = discussion.listingSeatDisplay?.();
     const date = (discussion as any).lastPostedAt?.() || (discussion as any).createdAt?.();
 
     const tags = (discussion as any).tags?.() || [];
@@ -137,6 +138,17 @@ export default function addListingHeroBadge(): void {
                 </div>
               )}
 
+              {/*
+                Seats sit above the location: on a ticket listing "Section 114,
+                Row 12, Seats 4-7" is what the buyer is actually scanning for,
+                and the venue is already in the title.
+              */}
+              {seatDisplay && (
+                <div className="ClassifiedsHero-seats">
+                  <i className="fas fa-ticket" aria-hidden="true" />
+                  <span>{seatDisplay}</span>
+                </div>
+              )}
               {location && (
                 <div className="ClassifiedsHero-location">
                   <i className="fas fa-map-marker-alt" aria-hidden="true" />

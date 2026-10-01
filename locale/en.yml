@@ -44,6 +44,12 @@ flarum-classifieds:
       price_max_label: Max price (range)
       currency_label: Currency
       location_label: Location
+      section_label: Section
+      section_placeholder: Section
+      row_label: Row
+      row_placeholder: Row
+      seats_label: Seats
+      seats_placeholder: 'Seats (e.g. 4-7)'
       location_placeholder: City, state, country…
       configure_listing_button: Configure listing details
 

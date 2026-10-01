@@ -88,6 +88,32 @@ class DiscussionResourceFields
                 ->get(fn (Discussion $d) => $d->listing?->location)
                 ->set(fn (Discussion $d, ?string $value, Context $c) => $this->stage($d, $c, ['location' => $this->normalize($value)])),
 
+            // Ticket seat details. Free text on all three — see the migration.
+            Schema\Str::make('listingSection')
+                ->writable(fn (Discussion $d, Context $c) => $this->canWriteListing($d, $c))
+                ->nullable()
+                ->get(fn (Discussion $d) => $d->listing?->section)
+                ->set(fn (Discussion $d, ?string $value, Context $c) => $this->stage($d, $c, ['section' => $this->normalize($value)])),
+
+            Schema\Str::make('listingRow')
+                ->writable(fn (Discussion $d, Context $c) => $this->canWriteListing($d, $c))
+                ->nullable()
+                ->get(fn (Discussion $d) => $d->listing?->row)
+                ->set(fn (Discussion $d, ?string $value, Context $c) => $this->stage($d, $c, ['row' => $this->normalize($value)])),
+
+            Schema\Str::make('listingSeats')
+                ->writable(fn (Discussion $d, Context $c) => $this->canWriteListing($d, $c))
+                ->nullable()
+                ->get(fn (Discussion $d) => $d->listing?->seats)
+                ->set(fn (Discussion $d, ?string $value, Context $c) => $this->stage($d, $c, ['seats' => $this->normalize($value)])),
+
+            // Pre-assembled so the hero and the list meta do not each build it
+            // and drift — and null when there is nothing, so a template can
+            // test it rather than render an empty line with a ticket icon.
+            Schema\Str::make('listingSeatDisplay')
+                ->nullable()
+                ->get(fn (Discussion $d) => $d->listing?->seatDisplay()),
+
             Schema\DateTime::make('listingSoldAt')
                 ->get(fn (Discussion $d) => $d->listing?->sold_at),
 
@@ -235,6 +261,9 @@ class DiscussionResourceFields
             'price_max' => $listing->price_max,
             'currency' => $listing->currency,
             'location' => $listing->location,
+            'section' => $listing->section,
+            'row' => $listing->row,
+            'seats' => $listing->seats,
         ]);
 
         if (in_array($listing->status, [Listing::STATUS_SOLD, Listing::STATUS_COMPLETED], true)) {

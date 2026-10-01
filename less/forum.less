@@ -1263,3 +1263,36 @@
     &-greeting, &-prompt { font-size: 22px; }
   }
 }
+
+// ── Ticket seat details ────────────────────────────────────────────────────
+
+.ClassifiedsComposer-seatRow {
+  display: flex;
+  gap: 8px;
+}
+
+// 🚨 Proportional, not equal. A section is "Upper 320", a row is "AA" and the
+// seats are "4-7, 12" — giving them equal widths leaves the first truncated and
+// the middle one mostly empty.
+.ClassifiedsComposer-sectionInput { flex: 2 1 0; min-width: 0; }
+.ClassifiedsComposer-rowInput { flex: 1 1 0; min-width: 0; }
+.ClassifiedsComposer-seatsInput { flex: 2 1 0; min-width: 0; }
+
+.ClassifiedsHero-seats {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .ClassifiedsComposer-seatRow {
+    flex-wrap: wrap;
+  }
+
+  .ClassifiedsComposer-sectionInput,
+  .ClassifiedsComposer-rowInput,
+  .ClassifiedsComposer-seatsInput {
+    flex: 1 1 calc(50% - 4px);
+  }
+}

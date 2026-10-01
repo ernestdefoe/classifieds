@@ -13,6 +13,9 @@ export interface ListingFields {
   priceMax?: string | number | '';
   currency?: string;
   location?: string;
+  section?: string;
+  row?: string;
+  seats?: string;
   pendingImages?: PendingImage[];
   uploadedImages?: string[];
 }
@@ -186,7 +189,71 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
             aria-label={app.translator.trans('flarum-classifieds.forum.composer.location_label', {}, true) as string}
           />
         </div>
+
+        {/*
+          🚨 A separate row, and only for ticket listings.
+          Section, row and seat mean nothing on a listing for a sofa, and three
+          empty boxes on every ad is three more things to read past. The row
+          shows when the seller has said this is a ticket — see isTicketListing.
+        */}
+        {this.showSeatFields() && (
+          <div className="ClassifiedsComposer-row ClassifiedsComposer-seatRow">
+            <input
+              className="FormControl ClassifiedsComposer-sectionInput"
+              type="text"
+              maxlength={32}
+              value={listing.section || ''}
+              oninput={(e: InputEvent) => (listing.section = (e.target as HTMLInputElement).value)}
+              placeholder={app.translator.trans('flarum-classifieds.forum.composer.section_placeholder', {}, true) as string}
+              aria-label={app.translator.trans('flarum-classifieds.forum.composer.section_label', {}, true) as string}
+            />
+
+            <input
+              className="FormControl ClassifiedsComposer-rowInput"
+              type="text"
+              maxlength={16}
+              value={listing.row || ''}
+              oninput={(e: InputEvent) => (listing.row = (e.target as HTMLInputElement).value)}
+              placeholder={app.translator.trans('flarum-classifieds.forum.composer.row_placeholder', {}, true) as string}
+              aria-label={app.translator.trans('flarum-classifieds.forum.composer.row_label', {}, true) as string}
+            />
+
+            <input
+              className="FormControl ClassifiedsComposer-seatsInput"
+              type="text"
+              maxlength={64}
+              value={listing.seats || ''}
+              oninput={(e: InputEvent) => (listing.seats = (e.target as HTMLInputElement).value)}
+              placeholder={app.translator.trans('flarum-classifieds.forum.composer.seats_placeholder', {}, true) as string}
+              aria-label={app.translator.trans('flarum-classifieds.forum.composer.seats_label', {}, true) as string}
+            />
+          </div>
+        )}
       </div>
     );
+  }
+
+  /**
+   * Whether this listing looks like tickets.
+   *
+   * 🚨 Shown whenever ANY seat field already has a value, not only when the
+   * tag matches. An admin can rename or re-tag a listing later, and a field
+   * that disappears while still holding data is a field somebody cannot clear.
+   */
+  showSeatFields(): boolean {
+    const listing = this.attrs.composer.fields.listing || {};
+
+    if (listing.section || listing.row || listing.seats) return true;
+
+    const tags = this.attrs.composer.fields.tags || [];
+    const needle = (app.forum.attribute<string>('classifiedsTicketTagSlugs') || 'tickets,classifieds')
+      .split(',')
+      .map((t) => t.trim().toLowerCase())
+      .filter(Boolean);
+
+    return tags.some((t: any) => {
+      const slug = typeof t?.slug === 'function' ? t.slug() : t?.slug;
+      return slug && needle.includes(String(slug).toLowerCase());
+    });
   }
 }

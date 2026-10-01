@@ -29,6 +29,11 @@ class ListingValidator extends AbstractValidator
         'price_max' => ['nullable', 'numeric', 'min:0', 'gte:price'],
         'currency' => ['nullable', 'string', 'max:8'],
         'location' => ['nullable', 'string', 'max:255'],
+        // Lengths match the columns. Free text, because a section is "C" or
+        // "Upper 320" and a row is "AA" as often as "12".
+        'section' => ['nullable', 'string', 'max:32'],
+        'row' => ['nullable', 'string', 'max:16'],
+        'seats' => ['nullable', 'string', 'max:64'],
     ];
 
     protected function getRules(): array

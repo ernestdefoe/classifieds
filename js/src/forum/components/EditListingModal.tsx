@@ -18,6 +18,9 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
   priceMax!: Stream<string>;
   currency!: Stream<string>;
   location!: Stream<string>;
+  section!: Stream<string>;
+  row!: Stream<string>;
+  seats!: Stream<string>;
 
   oninit(vnode: Mithril.Vnode<EditListingModalAttrs, this>) {
     super.oninit(vnode);
@@ -33,6 +36,9 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
         'USD'
     );
     this.location = Stream(discussion.listingLocation() || '');
+    this.section = Stream(discussion.listingSection() || '');
+    this.row = Stream(discussion.listingRow() || '');
+    this.seats = Stream(discussion.listingSeats() || '');
   }
 
   className(): string {
@@ -90,6 +96,20 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
             <input className="FormControl" type="text" maxlength="255" bidi={this.location} />
           </div>
 
+          {/* Seat details. Shown for every listing here, unlike the composer —
+              an editor is already looking at one specific ad and may be adding
+              seats to something that was not tagged as tickets when posted. */}
+          <div className="Form-group ClassifiedsEdit-seats">
+            <label>{app.translator.trans('flarum-classifieds.forum.composer.section_label')}</label>
+            <input className="FormControl" type="text" maxlength="32" bidi={this.section} />
+
+            <label>{app.translator.trans('flarum-classifieds.forum.composer.row_label')}</label>
+            <input className="FormControl" type="text" maxlength="16" bidi={this.row} />
+
+            <label>{app.translator.trans('flarum-classifieds.forum.composer.seats_label')}</label>
+            <input className="FormControl" type="text" maxlength="64" bidi={this.seats} />
+          </div>
+
           <div className="Form-group">
             <Button className="Button Button--primary" type="submit" loading={this.loading}>
               {app.translator.trans('flarum-classifieds.forum.edit_listing.save_button')}
@@ -114,6 +134,9 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
         listingPriceMax: this.priceMax() === '' ? null : this.priceMax(),
         listingCurrency: this.currency() || null,
         listingLocation: this.location() || null,
+        listingSection: this.section() || null,
+        listingRow: this.row() || null,
+        listingSeats: this.seats() || null,
       } as any)
       .then(
         () => {
