@@ -1514,3 +1514,48 @@
 
   &:hover { background: rgba(17, 17, 17, 0.9); }
 }
+
+// ---------------------------------------------------------------------------
+// The composer has to fit what this extension puts in it
+// ---------------------------------------------------------------------------
+
+/*
+ * 🚨 Measured, not guessed: on a 900px window the composer was 300px tall while
+ * its content was 436px, and `.Composer-content` is `overflow-y: visible`. The
+ * stadium picker, the editor and the Post button were all below the window with
+ * nothing to scroll — the advert could not be finished.
+ *
+ * Two things fix it, and both are needed. Room, so the ordinary case simply
+ * fits; and a scroll, so a short window or a long set of fields can still reach
+ * the bottom instead of hiding it.
+ */
+body.composing-classifieds .Composer {
+  /*
+   * 🚨 Escaped. LESS has its OWN min() and tries to evaluate this one, which
+   * cannot mix vh with px — and a LESS error in an extension is fatal, not
+   * ignored: it 500s every page on the site, which is exactly what it did here.
+   */
+  min-height: ~"min(78vh, 780px)";
+
+  .Composer-content {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    min-height: 0;
+  }
+}
+
+// The photo well was 142px of the 300 the composer had. It says the same thing
+// in half the space, and the space is what was missing.
+.ClassifiedsComposer .ListingImageUploader-dropzone,
+.ClassifiedsComposer [class*='Uploader'] .Dropzone,
+.ClassifiedsComposer-images {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+@media (max-height: 760px) {
+  body.composing-classifieds .Composer {
+    min-height: 88vh;
+  }
+}

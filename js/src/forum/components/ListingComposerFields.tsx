@@ -272,6 +272,34 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
    * tag matches. An admin can rename or re-tag a listing later, and a field
    * that disappears while still holding data is a field somebody cannot clear.
    */
+  /*
+   * 🚨 Marks the composer so its own stylesheet can give it room.
+   *
+   * Flarum sizes the composer on the assumption that the editor can flex to
+   * fill it. These fields break that: measured on a 900px window, the composer
+   * was 300px tall while its content was 436px, with `overflow-y: visible` — so
+   * the stadium picker, the editor and the Post button all sat BELOW the
+   * window with nothing to scroll. The listing could not be finished at all.
+   *
+   * 🚨 The class goes on BODY, not on `.Composer`. Mithril owns the composer's
+   * className and rewrites it on every redraw, so a class added there is gone
+   * by the next one — measured: the rule was in the stylesheet, the element
+   * never carried the class, and the composer stayed 300px.
+   *
+   * 🚨 A class rather than `:has(.ClassifiedsComposer)`. The selector would do
+   * it on a current browser, but this is the only route a seller has to post an
+   * advert and it should not depend on one.
+   */
+  oncreate(vnode: Mithril.VnodeDOM<ListingComposerFieldsAttrs, this>) {
+    super.oncreate(vnode);
+    document.body.classList.add('composing-classifieds');
+  }
+
+  onremove(vnode: Mithril.VnodeDOM<ListingComposerFieldsAttrs, this>) {
+    super.onremove(vnode);
+    document.body.classList.remove('composing-classifieds');
+  }
+
   /** The stadium charts an admin has actually traced. */
   seatMaps(): any[] {
     return app.forum.attribute<any[]>('classifiedsSeatMaps') || [];
