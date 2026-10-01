@@ -177,6 +177,21 @@ class DiscussionResourceFields
         return $discussion->tags->contains(fn ($tag) => (bool) ($tag->is_classifieds ?? false));
     }
 
+    /**
+     * Whether this is a classifieds discussion, read from the database.
+     *
+     * Used where a wrong answer loses data, unlike the serializer's getter,
+     * where a cached relation is both correct and cheap.
+     */
+    protected function isClassifiedsFresh(Discussion $discussion): bool
+    {
+        if ($discussion->exists) {
+            $discussion->unsetRelation('tags');
+        }
+
+        return $this->isClassifieds($discussion);
+    }
+
     protected function canWriteListing(Discussion $discussion, Context $context): bool
     {
         if ($context->creating()) {
@@ -281,7 +296,21 @@ class DiscussionResourceFields
             return;
         }
 
-        if (! $this->isClassifieds($discussion)) {
+        /*
+         * 🚨 Re-read the tags here. Do NOT trust the loaded relation.
+         *
+         * This guard decides whether a staged listing is written at all, and on
+         * creation the `tags` relation can already be loaded and EMPTY — read
+         * for serialization before flarum-tags attaches anything. The guard
+         * then says "not a classifieds discussion" and the listing is dropped
+         * without a word: the discussion appears, correctly tagged, carrying no
+         * price, label or seat details, and nothing anywhere reports an error.
+         *
+         * It is environment-dependent, which is what makes it dangerous — it
+         * did not reproduce on the demo and did on fbsfb, where more extensions
+         * touch the same save. One extra query on save is the whole cost.
+         */
+        if (! $this->isClassifiedsFresh($discussion)) {
             return;
         }
 
