@@ -92,8 +92,15 @@ export default function addListingHeroBadge(): void {
 
           <div className="ClassifiedsHero">
             <div className="ClassifiedsHero-gallery">
-              {images.length ? (
-                <ClassifiedsHeroCarousel images={images} alt={discussion.title()} />
+              {/* A ticket listing usually has no photographs, so the chart
+                  alone is reason enough to show the gallery. */}
+              {images.length || seatMap?.image ? (
+                <ClassifiedsHeroCarousel
+                  images={images}
+                  seatMap={seatMap}
+                  onExpandMap={() => app.modal.show(SeatMapModal, { discussion })}
+                  alt={discussion.title()}
+                />
               ) : (
                 <div className="ClassifiedsHero-noImage">
                   <i className="fas fa-camera" aria-hidden="true" />
@@ -150,23 +157,6 @@ export default function addListingHeroBadge(): void {
                   <i className="fas fa-ticket" aria-hidden="true" />
                   <span>{seatDisplay}</span>
 
-                  {/*
-                    🚨 Offered only when there is a chart to open.
-
-                    A "Where are these seats?" link that opens an empty modal is
-                    worse than no link: the reader has already decided the
-                    listing told them something it cannot.
-                  */}
-                  {seatMap?.image && (
-                    <button
-                      type="button"
-                      className="Button Button--text ClassifiedsHero-seatMapLink"
-                      onclick={() => app.modal.show(SeatMapModal, { discussion })}
-                    >
-                      <i className="fas fa-map-location-dot" aria-hidden="true" />
-                      {app.translator.trans('flarum-classifieds.forum.seatmap.open')}
-                    </button>
-                  )}
                 </div>
               )}
               {location && (
