@@ -1332,12 +1332,31 @@
   padding: 0;
   font-size: 90%;
   font-weight: 600;
-  // The link colour, not the muted grey a text button defaults to: this is the
-  // one thing in the row a reader is meant to click.
-  color: var(--link-color) !important;
+  /*
+   * 🚨 Pinned to two literals, one per scheme, and NOT to --link-color.
+   *
+   * Measured against the hero's real background: the theme's link colour came
+   * out at 3.94:1 in dark mode, below the 4.5:1 floor for body text. One
+   * hardcoded value cannot fix that — against white the colour has to be dark
+   * enough (luminance <= 0.183) and against the dark hero light enough
+   * (>= 0.218), and no colour is both. So it is two, each measured.
+   */
+  color: #b3122c !important;
 
   i {
     margin-right: 4px;
+  }
+}
+
+[data-theme='dark'] .ClassifiedsHero-seatMapLink {
+  color: #ff8f9c !important;
+}
+
+// The same pair for anyone whose browser asks for dark but whose theme has not
+// set the attribute.
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .ClassifiedsHero-seatMapLink {
+    color: #ff8f9c !important;
   }
 }
 
