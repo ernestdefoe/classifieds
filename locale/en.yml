@@ -56,6 +56,7 @@ flarum-classifieds:
         needs_title: Give the chart a name first.
         needs_image: Upload an image or paste a URL.
         not_an_image: That file is not an image. Seating charts published as web pages have to be saved as an image first.
+        page_not_a_chart: That address is a web page, and no seating chart could be found on it. Open it in your browser, right-click the chart, copy its image address, and paste that instead.
         too_small: That image is too small to mark sections on.
         file_too_large: That file is too large (12MB maximum).
         upload_failed: The upload did not complete.

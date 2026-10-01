@@ -114,6 +114,46 @@ class SeatMapImporter
             throw new SeatMapImportException('fetch_failed', 'empty or oversized response');
         }
 
+        /*
+         * 🚨 One hop through a viewer page, because that is what a school's
+         * seating-chart link actually is.
+         *
+         * Measured: gopsusports.com/documents/<uuid>.pdf answers 200 with
+         * `text/html` and 400KB of page — from curl AND from a real browser, so
+         * it is not a bot wall, it is how SidearmSports publishes documents.
+         * The chart itself was on storage.googleapis.com, one link deeper, and
+         * it converted to a perfectly good 1774x1411 diagram. Most college
+         * athletics sites run SidearmSports, so without this hop the importer
+         * refuses the commonest source of charts there is, and does it with a
+         * "not an image" message that blames the operator's URL.
+         */
+        if ($this->looksLikeHtml($bytes)) {
+            $asset = $this->documentUrlWithin($bytes, $url);
+
+            if ($asset === null) {
+                throw new SeatMapImportException('page_not_a_chart');
+            }
+
+            // The same guard as the first hop: a page can name any address.
+            $this->assertFetchable($asset);
+
+            try {
+                $bytes = (string) (new Client())->get($asset, [
+                    'timeout' => 20,
+                    'headers' => ['User-Agent' => 'Mozilla/5.0 (compatible; Classifieds seat-map import)'],
+                    'allow_redirects' => ['max' => 2, 'strict' => true, 'referer' => false, 'protocols' => ['http', 'https']],
+                ])->getBody();
+            } catch (\Throwable $e) {
+                throw new SeatMapImportException('fetch_failed', $e->getMessage());
+            }
+
+            if ($bytes === '' || strlen($bytes) > self::MAX_BYTES || $this->looksLikeHtml($bytes)) {
+                // One hop only. A viewer page that leads to another viewer page
+                // is a site this cannot read, and chasing it would be a crawler.
+                throw new SeatMapImportException('page_not_a_chart');
+            }
+        }
+
         $tmp = $this->tempFile();
         file_put_contents($tmp, $bytes);
 
@@ -129,6 +169,89 @@ class SeatMapImporter
         }
 
         return $this->store($tmp);
+    }
+
+    protected function looksLikeHtml(string $bytes): bool
+    {
+        $head = ltrim(substr($bytes, 0, 512));
+
+        return stripos($head, '<!doctype') === 0 || stripos($head, '<html') === 0 || stripos($head, '<?xml') === 0;
+    }
+
+    /**
+     * The document a viewer page is actually showing, or null.
+     *
+     * 🚨 Scored, not "the first one" and not "the biggest".
+     *
+     * A page carries dozens of images — logos, sponsors, social icons, an
+     * open-graph preview. Picking by position or by size is how a harvester
+     * ends up filing a photograph of the ground as its seating chart, which is
+     * exactly the confidently-wrong answer this feature exists to avoid. So a
+     * candidate has to look like a document (a PDF, or a file whose name says
+     * seat/map/chart), and anything that smells like site furniture is dropped.
+     */
+    protected function documentUrlWithin(string $html, string $pageUrl): ?string
+    {
+        /*
+         * 🚨 Backslash-escaped slashes are undone first. These pages carry the
+         * real address inside embedded JSON as `https:\/\/storage...`, so
+         * matching the raw HTML finds the decorative <img> tags and misses the
+         * document the page exists to show.
+         */
+        $html = str_replace('\\/', '/', $html);
+
+        if (! preg_match_all('~https?://[^\s"\'<>]+\.(?:pdf|png|jpe?g|gif|webp)~i', $html, $m)) {
+            return null;
+        }
+
+        $best = null;
+        $bestScore = 0;
+
+        foreach (array_unique($m[0]) as $candidate) {
+            // The page's own address is not the document it is displaying.
+            if (strcasecmp($candidate, $pageUrl) === 0) {
+                continue;
+            }
+
+            $path = strtolower((string) parse_url($candidate, PHP_URL_PATH));
+
+            // Site furniture, never a seating chart.
+            if (preg_match('~(logo|icon|favicon|sponsor|avatar|banner|header|footer|thumb|social|placeholder)~', $path)) {
+                continue;
+            }
+
+            $score = 0;
+
+            // A PDF on an athletics site is nearly always the document itself.
+            if (str_ends_with($path, '.pdf')) {
+                $score += 10;
+            }
+
+            if (preg_match('~(seat|map|chart|stadium|diagram)~', $path)) {
+                $score += 6;
+            }
+
+            // Sidearm and friends serve the real file from object storage.
+            $host = strtolower((string) parse_url($candidate, PHP_URL_HOST));
+
+            if (preg_match('~(storage\.googleapis\.com|s3[.-][a-z0-9-]*amazonaws\.com|cloudfront\.net|blob\.core\.windows\.net)~', $host)) {
+                $score += 4;
+            }
+
+            // An imgproxy/resizer URL is a thumbnail of something else.
+            if (preg_match('~(imgproxy|/rs:fit|/resize|[?&]w=\d+)~', $candidate)) {
+                $score -= 6;
+            }
+
+            if ($score > $bestScore) {
+                $bestScore = $score;
+                $best = $candidate;
+            }
+        }
+
+        // 🚨 A weak best is no answer. Returning the least-bad image would hand
+        // back a sponsor banner with full confidence.
+        return $bestScore >= 6 ? $best : null;
     }
 
     /**
