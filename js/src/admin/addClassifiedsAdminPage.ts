@@ -24,6 +24,16 @@ export default function addClassifiedsAdminPage(): void {
   // the field will fall back to plain text until tags is enabled.
   registry.registerSetting(
     {
+      setting: 'flarum-classifieds.ticket_tag_ids',
+      type: 'flarum-tags.select-tags',
+      label: app.translator.trans('flarum-classifieds.admin.settings.ticket_tag_ids_label'),
+      help: app.translator.trans('flarum-classifieds.admin.settings.ticket_tag_ids_help'),
+    } as any,
+    6
+  );
+
+  registry.registerSetting(
+    {
       setting: 'flarum-classifieds.classifieds_tag_ids',
       type: 'flarum-tags.select-tags',
       label: app.translator.trans('flarum-classifieds.admin.settings.tag_ids_label'),

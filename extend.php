@@ -56,6 +56,9 @@ return [
         ->default('flarum-classifieds.allowed_labels', 'iso,wtb,wts,trade')
         ->default('flarum-classifieds.show_currency_symbol', '1')
         ->default('flarum-classifieds.classifieds_tag_ids', '[]')
+        // Empty means "every classifieds listing offers the seat fields".
+        ->default('flarum-classifieds.ticket_tag_ids', '[]')
+        ->serializeToForum('classifiedsTicketTagIds', 'flarum-classifieds.ticket_tag_ids')
         ->serializeToForum('classifiedsTagIds', 'flarum-classifieds.classifieds_tag_ids'),
 
     (new Extend\Model(Tag::class))

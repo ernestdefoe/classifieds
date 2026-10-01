@@ -6,6 +6,11 @@ flarum-classifieds:
   admin:
     settings:
       tag_ids_label: Classifieds tags
+      ticket_tag_ids_label: Ticket tags
+      ticket_tag_ids_help: >
+        Tags whose listings are tickets, so the composer offers section, row and
+        seat boxes and a stadium. Leave empty to offer them on every classifieds
+        listing.
       tag_ids_help: Pick the tags whose discussions should behave as classified ads. Discussions in any of the selected tags will get listing fields, status controls and pricing.
       default_currency_label: Default currency code
       default_currency_help: "3-letter ISO currency code (e.g. USD, EUR, BRL)."

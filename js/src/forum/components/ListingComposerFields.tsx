@@ -280,17 +280,44 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
   showSeatFields(): boolean {
     const listing = this.attrs.composer.fields.listing || {};
 
+    // Anything already filled in keeps its field, whatever the tags say. A
+    // field that vanishes while still holding data is a field nobody can clear.
     if (listing.section || listing.row || listing.seats) return true;
 
+    /*
+     * 🚨 Shown for every classifieds listing unless ticket tags are configured.
+     *
+     * This used to match the tag's SLUG against the words "tickets" and
+     * "classifieds". On fbsfb the tag's slug is `classifieds-158`, which
+     * matches neither, so the section, row and seat boxes never appeared and
+     * there was no way to enter them at all — the one route a seller has.
+     *
+     * Guessing at slugs was the mistake. An admin can now name the ticket tags
+     * explicitly, and until they do the fields simply show, because three
+     * optional boxes on a listing for a sofa cost far less than a ticket
+     * seller with nowhere to type their seat.
+     */
+    const ticketTags = this.ticketTagIds();
+
+    if (!ticketTags.length) return true;
+
     const tags = this.attrs.composer.fields.tags || [];
-    const needle = (app.forum.attribute<string>('classifiedsTicketTagSlugs') || 'tickets,classifieds')
-      .split(',')
-      .map((t) => t.trim().toLowerCase())
-      .filter(Boolean);
 
     return tags.some((t: any) => {
-      const slug = typeof t?.slug === 'function' ? t.slug() : t?.slug;
-      return slug && needle.includes(String(slug).toLowerCase());
+      const id = typeof t?.id === 'function' ? t.id() : t?.id;
+      return id != null && ticketTags.includes(String(id));
     });
+  }
+
+  /** Tag ids an admin has marked as ticket tags; empty means "all of them". */
+  ticketTagIds(): string[] {
+    const raw = app.forum.attribute<string>('classifiedsTicketTagIds');
+
+    try {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      return Array.isArray(parsed) ? parsed.map(String) : [];
+    } catch (e) {
+      return [];
+    }
   }
 }
