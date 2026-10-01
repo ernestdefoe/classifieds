@@ -107,6 +107,40 @@ class DiscussionResourceFields
                 ->get(fn (Discussion $d) => $d->listing?->seats)
                 ->set(fn (Discussion $d, ?string $value, Context $c) => $this->stage($d, $c, ['seats' => $this->normalize($value)])),
 
+            // Which stadium chart this listing's section belongs to. Nullable
+            // and never required — a seller who skips it still gets their
+            // section, row and seats shown as text, as before.
+            Schema\Number::make('listingSeatmapId')
+                ->writable(fn (Discussion $d, Context $c) => $this->canWriteListing($d, $c))
+                ->nullable()
+                ->get(fn (Discussion $d) => $d->listing?->seatmap_id)
+                ->set(fn (Discussion $d, $value, Context $c) => $this->stage($d, $c, ['seatmap_id' => $this->mapId($value)])),
+
+            /*
+             * The chart to draw, with the point already resolved.
+             *
+             * 🚨 The section table never leaves the server. A fully traced
+             * ground carries a hundred-odd coordinates and the browser needs
+             * exactly one of them — the one for the listing in front of it.
+             *
+             * 🚨 `point` is null when that section was not traced, and the
+             * front end must not invent one. A star in the wrong half of a
+             * ground is worse than no star: people believe a picture over a
+             * sentence, and the seller's own text is at least honest.
+             */
+            Schema\Arr::make('listingSeatMap')
+                ->nullable()
+                ->get(function (Discussion $d) {
+                    $listing = $d->listing;
+                    $map = $listing?->seatmap_id ? $listing->seatMap : null;
+
+                    if (! $map || blank($map->image_path)) {
+                        return null;
+                    }
+
+                    return $map->toSummary() + ['point' => $listing->seatPoint()];
+                }),
+
             // Pre-assembled so the hero and the list meta do not each build it
             // and drift — and null when there is nothing, so a template can
             // test it rather than render an empty line with a ticket icon.
@@ -170,6 +204,23 @@ class DiscussionResourceFields
         $value = trim($value);
 
         return $value === '' ? null : $value;
+    }
+
+    /**
+     * 🚨 Zero and the empty string both mean "no ground", not chart number 0.
+     *
+     * A <select> with nothing chosen posts "", and a cleared one can post 0;
+     * casting either straight to int would bind the listing to an id that
+     * cannot exist and leave the advert silently showing no chart with no way
+     * to tell why.
+     */
+    protected function mapId(mixed $value): ?int
+    {
+        if ($value === null || $value === '' || ! is_numeric($value)) {
+            return null;
+        }
+
+        return ((int) $value) > 0 ? (int) $value : null;
     }
 
     protected function numeric(mixed $value): ?float

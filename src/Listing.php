@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $bumped_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property int|null $seatmap_id
+ * @property SeatMap|null $seatMap
  * @property Discussion $discussion
  */
 class Listing extends AbstractModel
@@ -56,6 +58,7 @@ class Listing extends AbstractModel
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'screenshots' => 'array',
+        'seatmap_id' => 'int',
     ];
 
     protected $fillable = [
@@ -68,6 +71,7 @@ class Listing extends AbstractModel
         'section',
         'row',
         'seats',
+        'seatmap_id',
         'sold_at',
         'bumped_at',
         'screenshots',
@@ -110,6 +114,30 @@ class Listing extends AbstractModel
             fn (string $filename) => '/assets/classifieds/'.$filename,
             $screenshots
         ));
+    }
+
+    public function seatMap(): BelongsTo
+    {
+        return $this->belongsTo(SeatMap::class, 'seatmap_id');
+    }
+
+    /**
+     * Where on this listing's stadium chart the seats are, or null.
+     *
+     * 🚨 Null unless BOTH a ground was chosen and that exact section was traced
+     * on it. Everything else falls back to the seller's own words, which are at
+     * least honest — a star placed by guesswork would be believed over the text
+     * and could send a buyer to the opposite side of the ground.
+     *
+     * @return array{x: float, y: float}|null
+     */
+    public function seatPoint(): ?array
+    {
+        if (! $this->seatmap_id || blank($this->section)) {
+            return null;
+        }
+
+        return $this->seatMap?->locate($this->section);
     }
 
     public function discussion(): BelongsTo

@@ -8,7 +8,10 @@ use Flarum\Api\Endpoint;
 use Flarum\Api\Resource;
 use Flarum\Classifieds\Access;
 use Flarum\Classifieds\Api\Controller\ListingScreenshotsController;
+use Flarum\Classifieds\Api\Controller\SeatMapController;
+use Flarum\Classifieds\Api\Controller\SeatMapsController;
 use Flarum\Classifieds\Api\DiscussionResourceFields;
+use Flarum\Classifieds\Api\ForumResourceFields;
 use Flarum\Classifieds\Api\TagResourceFields;
 use Flarum\Classifieds\Api\UserResourceFields;
 use Flarum\Classifieds\Console\PruneListingsCommand;
@@ -64,11 +67,14 @@ return [
     (new Extend\ApiResource(Resource\DiscussionResource::class))
         ->fields(DiscussionResourceFields::class)
         ->endpoint([Endpoint\Show::class, Endpoint\Index::class, Endpoint\Create::class, Endpoint\Update::class], function ($endpoint) {
-            return $endpoint->eagerLoad(['listing']);
+            return $endpoint->eagerLoad(['listing', 'listing.seatMap']);
         }),
 
     (new Extend\ApiResource(Resource\UserResource::class))
         ->fields(UserResourceFields::class),
+
+    (new Extend\ApiResource(Resource\ForumResource::class))
+        ->fields(ForumResourceFields::class),
 
     (new Extend\Conditional())
         ->whenExtensionEnabled('flarum-tags', fn () => [
@@ -105,5 +111,10 @@ return [
             '/classifieds/listings/{id:[0-9]+}/screenshots',
             'classifieds.listings.screenshots.remove',
             ListingScreenshotsController::class
-        ),
+        )
+        ->get('/classifieds/seatmaps', 'classifieds.seatmaps.index', SeatMapsController::class)
+        ->post('/classifieds/seatmaps', 'classifieds.seatmaps.create', SeatMapsController::class)
+        ->get('/classifieds/seatmaps/{id:[0-9]+}', 'classifieds.seatmaps.show', SeatMapController::class)
+        ->patch('/classifieds/seatmaps/{id:[0-9]+}', 'classifieds.seatmaps.update', SeatMapController::class)
+        ->delete('/classifieds/seatmaps/{id:[0-9]+}', 'classifieds.seatmaps.delete', SeatMapController::class),
 ];

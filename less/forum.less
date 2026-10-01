@@ -1296,3 +1296,128 @@
     flex: 1 1 calc(50% - 4px);
   }
 }
+
+// ---------------------------------------------------------------------------
+// The stadium chart on a ticket listing
+// ---------------------------------------------------------------------------
+
+/*
+ * 🚨 The classifieds hero has to win its own text colour back from the theme.
+ *
+ * This hero replaces Flarum's, but it still renders inside whatever chrome the
+ * theme wraps a hero in. Bespoke paints every tag-coloured hero's text white
+ * with `[data-bespoke-tagactive="on"] .Hero`, which is specificity (0,2,0) —
+ * the same as the `.DiscussionHero--classifieds { color: var(--text-color) }`
+ * above, so it wins on source order alone, because the theme's stylesheet is
+ * concatenated last. The hero's background here is --body-bg with at most an
+ * 8% tint, so white text was invisible: the seat line, which is the first
+ * thing a buyer reads on a ticket listing, rendered white on near-white.
+ *
+ * (0,3,0) beats that outright, whatever the source order, and says nothing
+ * about which theme is installed.
+ */
+.App .Hero.DiscussionHero--classifieds {
+  &,
+  p,
+  .Hero-title,
+  .Hero-subtitle,
+  .ClassifiedsHero-seats,
+  .ClassifiedsHero-location {
+    color: var(--text-color);
+  }
+}
+
+.ClassifiedsHero-seatMapLink {
+  margin-left: 8px;
+  padding: 0;
+  font-size: 90%;
+  font-weight: 600;
+  // The link colour, not the muted grey a text button defaults to: this is the
+  // one thing in the row a reader is meant to click.
+  color: var(--link-color) !important;
+
+  i {
+    margin-right: 4px;
+  }
+}
+
+.ClassifiedsSeatMap {
+  text-align: center;
+
+  &-stage {
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+    max-width: 100%;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  &-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  // 🚨 Positioned in PERCENTAGES of the picture, because the coordinates were
+  // stored as fractions of it. One tracing is then correct at every width the
+  // chart is later drawn — full screen, in a modal, or on a phone.
+  // 🚨 Literal colours, never theme variables.
+  //
+  // This marker has to stand out against an arbitrary seating chart, and a
+  // theme variable holds whatever that theme decided. `--alert-error-color` is
+  // the TEXT colour of an error alert, which on this theme is #fff — so a star
+  // asking for it drew white on a white disc, invisible, and the LESS fallback
+  // never fired because the variable was defined. A marker whose whole job is
+  // to be seen does not take its colour from somewhere else.
+  &-star {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 14px;
+    background: #d32f2f;
+    // Two rings, one light and one dark, so it reads on a pale chart and on a
+    // dark one without knowing in advance which this is.
+    box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.45);
+    animation: ClassifiedsSeatMap-pulse 1.8s ease-out infinite;
+  }
+
+  &-caption {
+    margin-top: 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  &-untraced {
+    display: block;
+    margin-top: 4px;
+    font-weight: 400;
+    color: var(--muted-color);
+  }
+}
+
+@keyframes ClassifiedsSeatMap-pulse {
+  0% { box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(0, 0, 0, 0.45), 0 0 0 0 rgba(211, 47, 47, 0.65); }
+  70% { box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(0, 0, 0, 0.45), 0 0 0 18px rgba(211, 47, 47, 0); }
+  100% { box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(0, 0, 0, 0.45), 0 0 0 0 rgba(211, 47, 47, 0); }
+}
+
+// A reader who has asked the browser not to animate gets a still marker. The
+// pulse is decoration; the position is the information.
+@media (prefers-reduced-motion: reduce) {
+  .ClassifiedsSeatMap-star {
+    animation: none;
+  }
+}
+
+.ClassifiedsComposer-mapRow {
+  margin-top: 8px;
+}

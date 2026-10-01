@@ -23,6 +23,49 @@ flarum-classifieds:
       auto_prune_sold_label: Auto-prune sold listings
       auto_prune_sold_help: When pruning runs, also remove sold/completed listings.
 
+    seatmaps:
+      title: Stadium seating charts
+      help: >
+        Add a ground's own seating chart, then click each section on it once.
+        A listing that names a section you have marked shows a star in the
+        right place; anything you have not marked falls back to the seller's
+        own words. A chart is invisible to sellers until it has at least one
+        section marked on it.
+      add: Add a chart
+      add_button: Add
+      name_placeholder: "Stadium name (e.g. Bryant-Denny Stadium)"
+      upload: Upload an image
+      or: or
+      url_help: >
+        Paste the address of the ground's own seating chart — a PNG, JPEG or
+        PDF. PDFs are converted automatically.
+      none: No seating charts yet.
+      traced: "{count} sections marked"
+      untraced: Not marked yet — sellers cannot pick this
+      trace: Mark sections
+      delete: Delete
+      delete_confirm: "Delete the seating chart for {title}? Listings using it will keep their section text."
+      trace_title: "Mark sections — {title}"
+      trace_help: Type a section name, then click where it is on the chart. Click a marker to remove it. Nothing is saved until you press Save.
+      section_placeholder: "Section (e.g. 112)"
+      remove: "Remove {section}"
+      save: Save sections
+      needs_title: Give the chart a name first.
+      needs_image: Upload an image or paste a URL.
+      errors:
+        needs_title: Give the chart a name first.
+        needs_image: Upload an image or paste a URL.
+        not_an_image: That file is not an image. Seating charts published as web pages have to be saved as an image first.
+        too_small: That image is too small to mark sections on.
+        file_too_large: That file is too large (12MB maximum).
+        upload_failed: The upload did not complete.
+        bad_url: That is not a usable web address.
+        private_url: That address is on a private network and will not be fetched.
+        fetch_failed: The chart could not be downloaded.
+        pdf_failed: That PDF could not be converted.
+        pdf_no_poppler: PDF conversion is unavailable — poppler-utils is not installed on this server.
+        bad_payload: The sections could not be read.
+
     permissions:
       mark_listing_sold_label: Mark listings as sold/active
       bump_listing_label: Bump own listing
@@ -50,8 +93,17 @@ flarum-classifieds:
       row_placeholder: Row
       seats_label: Seats
       seats_placeholder: 'Seats (e.g. 4-7)'
+      seatmap_label: Stadium
+      seatmap_none: "No seating chart"
       location_placeholder: City, state, country…
       configure_listing_button: Configure listing details
+
+    seatmap:
+      title: Seating chart
+      open: Where are these seats?
+      unavailable: No seating chart is available for this listing.
+      marker: "Section {section}"
+      not_marked: "Section {section} has not been marked on this chart yet."
 
     start_listing:
       title: New classifieds listing

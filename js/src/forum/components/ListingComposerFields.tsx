@@ -16,6 +16,7 @@ export interface ListingFields {
   section?: string;
   row?: string;
   seats?: string;
+  seatmapId?: number | '' | null;
   pendingImages?: PendingImage[];
   uploadedImages?: string[];
 }
@@ -229,6 +230,37 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
             />
           </div>
         )}
+
+        {/*
+          🚨 The ground picker shows only when charts have been traced.
+
+          An empty select labelled "Stadium" is a control that is there, worded
+          and styled, and can do nothing — and the seller has no way to know
+          that the reason is an admin who has not traced a chart yet. With no
+          charts, the seat row stands on its own exactly as it did before.
+        */}
+        {this.showSeatFields() && this.seatMaps().length > 0 && (
+          <div className="ClassifiedsComposer-row ClassifiedsComposer-mapRow">
+            <select
+              className="FormControl ClassifiedsComposer-mapSelect"
+              value={listing.seatmapId ?? ''}
+              onchange={(e: Event) => {
+                const raw = (e.target as HTMLSelectElement).value;
+                // '' means "no ground", never chart 0 — the server reads it the
+                // same way, so a cleared select clears the binding.
+                listing.seatmapId = raw === '' ? '' : Number(raw);
+              }}
+              aria-label={app.translator.trans('flarum-classifieds.forum.composer.seatmap_label', {}, true) as string}
+            >
+              <option value="">{app.translator.trans('flarum-classifieds.forum.composer.seatmap_none')}</option>
+              {this.seatMaps().map((map: any) => (
+                <option value={map.id} key={map.id}>
+                  {map.title}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
     );
   }
@@ -240,6 +272,11 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
    * tag matches. An admin can rename or re-tag a listing later, and a field
    * that disappears while still holding data is a field somebody cannot clear.
    */
+  /** The stadium charts an admin has actually traced. */
+  seatMaps(): any[] {
+    return app.forum.attribute<any[]>('classifiedsSeatMaps') || [];
+  }
+
   showSeatFields(): boolean {
     const listing = this.attrs.composer.fields.listing || {};
 

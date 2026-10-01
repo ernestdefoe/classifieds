@@ -10,6 +10,7 @@ import ClassifiedsHeroCarousel from './components/ClassifiedsHeroCarousel';
 import ClassifiedsBreadcrumb from './components/ClassifiedsBreadcrumb';
 import ClassifiedsActions from './components/ClassifiedsActions';
 import ClassifiedsSellerCard from './components/ClassifiedsSellerCard';
+import SeatMapModal from './components/SeatMapModal';
 
 /**
  * For classifieds discussions we replace the entire DiscussionHero with a 2-column,
@@ -51,6 +52,7 @@ export default function addListingHeroBadge(): void {
     );
     const location = discussion.listingLocation();
     const seatDisplay = discussion.listingSeatDisplay?.();
+    const seatMap = (discussion as any).listingSeatMap?.();
     const date = (discussion as any).lastPostedAt?.() || (discussion as any).createdAt?.();
 
     const tags = (discussion as any).tags?.() || [];
@@ -147,6 +149,24 @@ export default function addListingHeroBadge(): void {
                 <div className="ClassifiedsHero-seats">
                   <i className="fas fa-ticket" aria-hidden="true" />
                   <span>{seatDisplay}</span>
+
+                  {/*
+                    🚨 Offered only when there is a chart to open.
+
+                    A "Where are these seats?" link that opens an empty modal is
+                    worse than no link: the reader has already decided the
+                    listing told them something it cannot.
+                  */}
+                  {seatMap?.image && (
+                    <button
+                      type="button"
+                      className="Button Button--text ClassifiedsHero-seatMapLink"
+                      onclick={() => app.modal.show(SeatMapModal, { discussion })}
+                    >
+                      <i className="fas fa-map-location-dot" aria-hidden="true" />
+                      {app.translator.trans('flarum-classifieds.forum.seatmap.open')}
+                    </button>
+                  )}
                 </div>
               )}
               {location && (

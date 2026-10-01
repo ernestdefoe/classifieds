@@ -41,6 +41,7 @@ function ensureListingState(composer: any): ListingFields {
       section: '',
       row: '',
       seats: '',
+      seatmapId: '',
     };
   }
   return composer.fields.listing;
@@ -90,6 +91,7 @@ export default function addListingComposer(): void {
     data.listingSection = listing.section || null;
     data.listingRow = listing.row || null;
     data.listingSeats = listing.seats || null;
+    data.listingSeatmapId = listing.seatmapId || null;
 
     return data;
   });

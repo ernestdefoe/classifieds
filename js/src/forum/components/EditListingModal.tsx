@@ -21,6 +21,11 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
   section!: Stream<string>;
   row!: Stream<string>;
   seats!: Stream<string>;
+  seatmapId!: Stream<string>;
+
+  seatMaps(): any[] {
+    return app.forum.attribute<any[]>('classifiedsSeatMaps') || [];
+  }
 
   oninit(vnode: Mithril.Vnode<EditListingModalAttrs, this>) {
     super.oninit(vnode);
@@ -39,6 +44,7 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
     this.section = Stream(discussion.listingSection() || '');
     this.row = Stream(discussion.listingRow() || '');
     this.seats = Stream(discussion.listingSeats() || '');
+    this.seatmapId = Stream(String(discussion.listingSeatmapId?.() || ''));
   }
 
   className(): string {
@@ -108,6 +114,19 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
 
             <label>{app.translator.trans('flarum-classifieds.forum.composer.seats_label')}</label>
             <input className="FormControl" type="text" maxlength="64" bidi={this.seats} />
+
+            {/* Only when charts exist — see the note on the composer's picker. */}
+            {this.seatMaps().length > 0 && [
+              <label>{app.translator.trans('flarum-classifieds.forum.composer.seatmap_label')}</label>,
+              <select className="FormControl" bidi={this.seatmapId}>
+                <option value="">{app.translator.trans('flarum-classifieds.forum.composer.seatmap_none')}</option>
+                {this.seatMaps().map((map: any) => (
+                  <option value={String(map.id)} key={map.id}>
+                    {map.title}
+                  </option>
+                ))}
+              </select>,
+            ]}
           </div>
 
           <div className="Form-group">
@@ -137,6 +156,7 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
         listingSection: this.section() || null,
         listingRow: this.row() || null,
         listingSeats: this.seats() || null,
+        listingSeatmapId: this.seatmapId() ? Number(this.seatmapId()) : null,
       } as any)
       .then(
         () => {

@@ -5,3 +5,175 @@
     max-width: 540px;
   }
 }
+
+// ---------------------------------------------------------------------------
+// Stadium seating charts and the tracer
+// ---------------------------------------------------------------------------
+
+.ClassifiedsSeatMaps {
+  margin-top: 24px;
+
+  &-list {
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--control-bg);
+  }
+
+  &-thumb {
+    width: 64px;
+    height: 48px;
+    object-fit: contain;
+    background: var(--control-bg);
+    border-radius: 4px;
+    flex: 0 0 auto;
+  }
+
+  &-meta {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &-count {
+    font-size: 85%;
+    color: var(--muted-color);
+
+    // An untraced chart is invisible to sellers, so it is called out rather
+    // than left reading as a plain zero.
+    &--none {
+      color: var(--error-color, #e53935);
+      font-weight: 600;
+    }
+  }
+
+  &-empty {
+    color: var(--muted-color);
+  }
+
+  &-add {
+    border: 1px solid var(--control-bg);
+    border-radius: 6px;
+    padding: 12px 16px;
+
+    legend {
+      font-size: 90%;
+      font-weight: 600;
+      padding: 0 6px;
+      width: auto;
+      border: 0;
+      margin: 0;
+    }
+
+    .FormControl {
+      margin-bottom: 8px;
+    }
+  }
+
+  &-sources {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  &-or {
+    color: var(--muted-color);
+    font-size: 85%;
+    text-transform: uppercase;
+  }
+
+  &-error {
+    color: var(--error-color, #e53935);
+  }
+}
+
+.ClassifiedsTracer {
+  &-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  &-name {
+    max-width: 220px;
+  }
+
+  &-count {
+    color: var(--muted-color);
+    font-size: 90%;
+  }
+
+  // The chart is a document, so it is given a page to sit on rather than
+  // floating as a white rectangle on the modal's grey.
+  &-canvas {
+    text-align: center;
+  }
+
+  &-stage {
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+    cursor: crosshair;
+    max-width: 100%;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  &-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  // 🚨 pointer-events:none on the overlay, auto on the markers.
+  //
+  // The overlay covers the picture edge to edge, so without this every click
+  // meant for the chart lands on the overlay instead and the tracer silently
+  // does nothing — which reads as a dead page rather than as a bug.
+  &-markers {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &-marker {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+    border: 0;
+    border-radius: 999px;
+    padding: 1px 6px;
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 700;
+    // Literal, for the same reason as the forum's star: these sit on an
+    // arbitrary seating chart, and a pale theme colour would put white text on
+    // a white chart.
+    color: #fff;
+    background: #2c3e50;
+    box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+    white-space: nowrap;
+
+    // Red on hover says what the click will do: remove it.
+    &:hover {
+      background: #d32f2f;
+    }
+  }
+
+  &-footer {
+    margin-top: 12px;
+  }
+}

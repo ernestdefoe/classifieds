@@ -1,6 +1,18 @@
 import app from 'flarum/admin/app';
 
-const EXT_ID = 'ramon-classifieds';
+import SeatMapsPanel from './components/SeatMapsPanel';
+
+/**
+ * 🚨 This must be composer.json's `name` with the slash as a hyphen.
+ *
+ * It is how the registry finds this extension's page, and a value that does
+ * not match nothing-matches silently: the page renders "This extension has no
+ * settings", exactly as it would if none had been registered. The fork renamed
+ * the package from ramon/classifieds to ernestdefoe/classifieds and left this
+ * behind, so every setting and permission here was invisible until it was
+ * spotted on an unrelated page.
+ */
+const EXT_ID = 'ernestdefoe-classifieds';
 
 export default function addClassifiedsAdminPage(): void {
   const trans = (key: string) => app.translator.trans(`flarum-classifieds.admin.settings.${key}`);
@@ -19,6 +31,11 @@ export default function addClassifiedsAdminPage(): void {
     } as any,
     5
   );
+
+  // The stadium charts, with their tracer. Registered as custom content rather
+  // than as a setting: it owns its own data, and burying it behind a separate
+  // route would hide the one step (tracing) that makes a chart usable at all.
+  registry.registerSetting(() => m(SeatMapsPanel), 100, 'classifieds-seatmaps');
 
   registry
     .registerSetting(
