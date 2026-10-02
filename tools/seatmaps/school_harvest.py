@@ -168,19 +168,35 @@ def looks_like_html(b):
     return head.startswith(b'<!doctype') or head.startswith(b'<html') or head.startswith(b'<?xml')
 
 
-def to_png(path):
-    """Schools publish PDFs more often than images; 150dpi keeps the numbers
-    readable where 72 does not."""
-    if not open(path, 'rb').read(4) == b'%PDF':
-        return path
-    out = path[:-4] if path.endswith('.pdf') else path
-    subprocess.run(['pdftoppm', '-png', '-r', '150', '-f', '1', '-l', '1',
-                    path, out], capture_output=True, timeout=120)
-    for suffix in ('-1.png', '-01.png', '-001.png', '.png'):
-        if os.path.exists(out + suffix):
-            return out + suffix
-    return None
+def to_png(path, target=1800):
+    """Render a PDF's first page at a dpi chosen for THIS document.
 
+    🚨 Never a fixed dpi. A vector chart's page size in points says nothing
+    about its detail: California publishes Memorial Stadium on a 240x172pt
+    page, which is 500px at 150dpi and was thrown away by a minimum-width
+    check -- while the artwork scales perfectly to any size asked for.
+    """
+    if open(path, 'rb').read(4) != b'%PDF':
+        return path
+    pts = 0
+    try:
+        info = subprocess.run(['pdfinfo', path], capture_output=True, timeout=60)
+        m = re.search(r'Page size:\s+([\d.]+) x ([\d.]+)',
+                      info.stdout.decode('utf-8', 'replace'))
+        if m:
+            pts = max(float(m.group(1)), float(m.group(2)))
+    except Exception:
+        pass
+    dpi = 150
+    if pts:
+        dpi = int(max(150, min(600, target * 72.0 / pts)))
+    stem = path[:-4]
+    subprocess.run(['pdftoppm', '-png', '-r', str(dpi), '-f', '1', '-l', '1',
+                    path, stem], capture_output=True, timeout=300)
+    for s in ('-1.png', '-01.png', '-001.png', '.png'):
+        if os.path.exists(stem + s):
+            return stem + s
+    return None
 
 def main():
     os.makedirs(OUT, exist_ok=True)

@@ -51,6 +51,28 @@ SECTION = re.compile(r'^[A-Z]{0,4}\d{0,4}[A-Z]{0,3}$')
 WORDLIST = '/usr/share/dict/words'
 MAX_WORD_SHARE = 0.4
 
+# 🚨 And a chart is not a page of prose OR of statistics.
+#
+# The dictionary test above catches a compliance PDF, and misses a volleyball
+# box score, whose junk is NUMBERS -- New Mexico State's "172 sections" were
+# kills, digs and attendances. What separates them is sheer volume: measured
+# across five real charts and six documents a crawler mistook for them, a
+# chart carries 223-433 words and the documents carried 1005-1196. A page that
+# is a seating chart does not have a thousand words on it.
+MAX_WORDS = 700
+
+# 🚨 And a chart is not a TABLE.
+#
+# Kennesaw State's "86 sections" were a men's golf statistics sheet: sparse
+# enough to pass the word count, numeric enough to pass the dictionary test.
+# What gives a table away is its shape -- its entries sit on shared baselines,
+# row after row, while a chart's are scattered round an oval. Measured over
+# six real charts and the documents mistaken for them, charts put 7-40% of
+# their labels on a baseline shared by five or more, and the tables put
+# 73-96%.
+MAX_ON_SHARED_BASELINES = 0.6
+BASELINE_MIN = 5
+
 
 def _dictionary():
     try:
@@ -89,6 +111,9 @@ def trace(pdf, page=1):
     words = words_in(pdf, page)
     if not words:
         return {'sections': {}, 'dropped': {'*': 'no text layer'}}
+    if len(words) > MAX_WORDS:
+        return {'sections': {},
+                'dropped': {'*': f'{len(words)} words -- a document, not a chart'}}
 
     # 🚨 "GATE F" leaves an F sitting on the chart exactly where a section
     # label would be, and F is a perfectly good section name elsewhere. The
@@ -122,6 +147,16 @@ def trace(pdf, page=1):
     # height separates them without knowing any stadium's wording.
     heights = sorted(c[3] for c in cand)
     typical = heights[len(heights) // 2]
+
+    rows = {}
+    for t, cx, cy, h in cand:
+        rows.setdefault(round(cy, 3), 0)
+        rows[round(cy, 3)] += 1
+    on_rows = sum(n for n in rows.values() if n >= BASELINE_MIN)
+    if len(cand) >= 20 and on_rows / len(cand) > MAX_ON_SHARED_BASELINES:
+        return {'sections': {},
+                'dropped': {'*': f'a table, not a chart '
+                                 f'({on_rows / len(cand):.0%} of labels on shared baselines)'}}
 
     words_en = _dictionary()
     if words_en:

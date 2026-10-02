@@ -125,12 +125,26 @@ not listed, so a chart cannot reach the site without a person having seen it:
   any 403, re-ask a host known to work. Harvest **sequentially**, 15–25s apart;
   8–14s tripped the throttle at school 43, and an ad-hoc request made by hand
   during a run tripped it again.
+- **🚨 Crawling schools' sites found NOTHING usable — 70 schools, 33 downloads,
+  zero charts.** What it actually collected: a volleyball match-notes PDF
+  (scored 143 "sections"), a soccer box score (147), a men's golf statistics
+  table (86), a cross-country results sheet, media guides and a compliance
+  policy. Every chart on the site came from a direct link or a targeted
+  search instead. Three guards now refuse those documents — see below — but
+  the lesson is that page-scraping an athletics site is not a route.
 - **🚨 "Whichever traces best" is fooled by prose.** Clemson's seating-chart
   *page* led to a compliance PDF, and HAZING, FRAUD, TITLE, IX and SEXUAL are
   all section-shaped — it scored 38 "sections". The giveaway is that they are
   WORDS, where a real chart's labels are codes, so a document whose labels are
   >40% dictionary words is refused whole. This test works on a text layer and
   NOT on OCR, whose junk (`HLYON`, `JOWS`) is in no dictionary.
+- **🚨 ...and a box score is fooled by neither.** A volleyball stats sheet's
+  junk is NUMBERS, so it passes the dictionary test. Two more shapes separate
+  it: a real chart carries **223-433 words** where those documents carried
+  **1005-1196**, and a chart scatters its labels round an oval where a table
+  lines them up — charts put **7-40%** of labels on a baseline shared by five
+  or more, tables **73-96%**. All three guards together pass every real chart
+  and refuse every document measured.
 - **🚨 Do not guess which document is the chart — judge by the answer.**
   `chart_from_urls.py` fetches several candidates and keeps whichever traces
   best. A parking map scores 0 and loses on its own merits, with no rule

@@ -70,17 +70,35 @@ def document_in(html, page_url):
     return best
 
 
-def to_png(path):
+def to_png(path, target=1800):
+    """Render a PDF's first page at a dpi chosen for THIS document.
+
+    🚨 Never a fixed dpi. A vector chart's page size in points says nothing
+    about its detail: California publishes Memorial Stadium on a 240x172pt
+    page, which is 500px at 150dpi and was thrown away by a minimum-width
+    check -- while the artwork scales perfectly to any size asked for.
+    """
     if open(path, 'rb').read(4) != b'%PDF':
         return path
+    pts = 0
+    try:
+        info = subprocess.run(['pdfinfo', path], capture_output=True, timeout=60)
+        m = re.search(r'Page size:\s+([\d.]+) x ([\d.]+)',
+                      info.stdout.decode('utf-8', 'replace'))
+        if m:
+            pts = max(float(m.group(1)), float(m.group(2)))
+    except Exception:
+        pass
+    dpi = 150
+    if pts:
+        dpi = int(max(150, min(600, target * 72.0 / pts)))
     stem = path[:-4]
-    subprocess.run(['pdftoppm', '-png', '-r', '150', '-f', '1', '-l', '1',
-                    path, stem], capture_output=True, timeout=180)
+    subprocess.run(['pdftoppm', '-png', '-r', str(dpi), '-f', '1', '-l', '1',
+                    path, stem], capture_output=True, timeout=300)
     for s in ('-1.png', '-01.png', '-001.png', '.png'):
         if os.path.exists(stem + s):
             return stem + s
     return None
-
 
 def try_url(team, url, idx):
     """Fetch one candidate, through the viewer hop if needed, and trace it."""
