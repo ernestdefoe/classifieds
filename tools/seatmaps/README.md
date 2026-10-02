@@ -34,7 +34,33 @@ Measured on the same file: **image map 58 sections, OCR 0.** These charts are
 detail that was never there. Where a tenant ships a plain picture with no
 `<map>`, expect a chart with no stars and say so.
 
-### 2. OCR (`trace.py`) — for charts that are actually legible
+### 2. The PDF text layer (`pdf_trace.py`) — try this BEFORE OCR, always
+
+Schools publish their charts as vector PDFs drawn in Illustrator, and the
+section names in them are usually real text. `pdftotext -bbox` gives the exact
+box of every label — the same quality of answer as an image map, for the same
+reason: nobody guessed it.
+
+Measured on Penn State's Beaver Stadium: **OCR 0 sections, text layer 113.**
+Georgia Tech 46, the LA Memorial Coliseum 56, all placed exactly.
+
+What it buys over OCR is precision, not recall. OCR returns `HLYON` for NORTH
+and `JOWS` for ROWS, and no stop list can anticipate a misreading; here the
+words are exact, so a short list of chart furniture removes them. It also
+gives something OCR never can — **word order**: "GATE F" leaves an `F` sitting
+exactly where a section label would be, and the preceding word is what tells
+them apart.
+
+🚨 **But only when that word is genuinely adjacent.** Reading order in a PDF is
+not spatial: USC's section 322 follows an unrelated "GATE" from the other side
+of the page, and a bare preceding-word test silently discarded real sections.
+Compare the boxes, not the sequence.
+
+🚨 **A chart can be part text and part outlines.** USC's 104, 105, 106 and 110
+are vector shapes with no text behind them, so they simply are not there.
+Expect gaps on mixed charts rather than assuming the extraction failed.
+
+### 3. OCR (`trace.py`) — for charts that are actually legible
 
 Several passes at several scales, and a label is kept only when independent
 passes agree on the same place. It works well on large, high-contrast charts
@@ -51,6 +77,8 @@ the family rule, because page furniture is numerous and similar-shaped.
 
 ```bash
 export SEATMAP_WORK=/some/work/dir        # harvest.json, charts/, bundle/
+python3 school_harvest.py                 # schools' own sites: team|brand|venue
+python3 chart_from_urls.py                # or feed URLs: team|venue|url
 python3 evenue_harvest.py                 # needs brands.txt: team|brand|venue
 python3 overlay.py                        # draw the sections onto the charts
 #   ... LOOK at overlays/, then write decisions.json ...
@@ -97,6 +125,17 @@ not listed, so a chart cannot reach the site without a person having seen it:
   any 403, re-ask a host known to work. Harvest **sequentially**, 15–25s apart;
   8–14s tripped the throttle at school 43, and an ad-hoc request made by hand
   during a run tripped it again.
+- **🚨 Do not guess which document is the chart — judge by the answer.**
+  `chart_from_urls.py` fetches several candidates and keeps whichever traces
+  best. A parking map scores 0 and loses on its own merits, with no rule
+  needed to describe it. Picking Penn State's by filename took one with no
+  text layer at all.
+- **🚨 Score what a file IS above what format it is.** Iowa publishes
+  `kinnick-seating-map.png` beside three opaquely-named PDFs, and weighting
+  `.pdf` above the keyword ranked the unknowns first.
+- **🚨 Send `--compressed`.** Without it curl hands back gzip and every page
+  scores as binary noise: two schools reported "nothing that scored as a
+  chart" with the links right there in the markup.
 - **🚨 Never merge these coordinates into an existing traced chart.** They are
   exact *for the eVenue picture*. `load.php` creates where nothing exists, fills
   a chart that was never traced, replaces only a decisively better one — backing
