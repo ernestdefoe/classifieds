@@ -36,6 +36,28 @@ STOP = {
 }
 
 SECTION = re.compile(r'^[A-Z]{0,4}\d{0,4}[A-Z]{0,3}$')
+
+# 🚨 Is this document a chart at all?
+#
+# Judging a candidate by "whichever yields the most sections" is fooled by
+# prose: Clemson's seating-chart PAGE led to a compliance PDF, and HAZING,
+# FRAUD, TITLE, IX, SEXUAL and RIGHTS are all section-shaped. The giveaway is
+# that they are WORDS. A real chart's labels are codes -- EAU, C401, 322 --
+# so a document whose labels are mostly dictionary words is prose, and the
+# whole document is refused rather than any particular label.
+#
+# This works here and NOT for OCR, because OCR's junk is misreadings (HLYON,
+# JOWS) which are in no dictionary. Exact text is what makes the test possible.
+WORDLIST = '/usr/share/dict/words'
+MAX_WORD_SHARE = 0.4
+
+
+def _dictionary():
+    try:
+        with open(WORDLIST) as fh:
+            return {w.strip().upper() for w in fh if len(w.strip()) >= 3}
+    except OSError:
+        return set()
 WORD = re.compile(r'<word xMin="([\d.]+)" yMin="([\d.]+)" '
                   r'xMax="([\d.]+)" yMax="([\d.]+)">([^<]*)</word>')
 PAGE = re.compile(r'<page width="([\d.]+)" height="([\d.]+)"')
@@ -100,6 +122,15 @@ def trace(pdf, page=1):
     # height separates them without knowing any stadium's wording.
     heights = sorted(c[3] for c in cand)
     typical = heights[len(heights) // 2]
+
+    words_en = _dictionary()
+    if words_en:
+        names = {c[0] for c in cand}
+        share = sum(1 for n in names if n in words_en) / max(len(names), 1)
+        if share > MAX_WORD_SHARE:
+            return {'sections': {},
+                    'dropped': {'*': f'prose, not a chart '
+                                     f'({share:.0%} of labels are dictionary words)'}}
 
     seen, dropped = {}, {}
     for t, cx, cy, h in cand:
