@@ -1,0 +1,5 @@
+# Research tooling for building seat maps: useful in the repo, no business
+# being installed on anyone's forum.
+/tools          export-ignore
+/.gitattributes export-ignore
+/.github        export-ignore

@@ -1,0 +1,19 @@
+San Jose State|sjsuspartans|CEFCU Stadium
+Wisconsin|uwbadgers|Camp Randall Stadium
+NC State|gopack|Carter-Finley Stadium
+Arkansas State|astateredwolves|Centennial Bank Stadium
+SMU|smumustangs|Gerald J. Ford Stadium
+Iowa State|cyclones|Jack Trice Stadium
+Marshall|herdzone|Joan C. Edwards Stadium
+Louisiana Tech|latechsports|Joe Aillet Stadium
+Central Michigan|cmuchippewas|Kelly/Shorts Stadium
+Washington State|wsucougars|Martin Stadium
+Army|goarmywestpoint|Michie Stadium
+Navy|navysports|Navy-Marine Corps Memorial Stadium
+Louisiana|ragincajuns|Our Lady of Lourdes Stadium
+Northwestern|nusports|Ryan Field
+Maryland|umterps|SECU Stadium
+San Diego State|goaztecs|Snapdragon Stadium
+Western Michigan|wmubroncos|Waldo Stadium
+UMass|umassathletics|Warren McGuirk Alumni Stadium
+South Carolina|gamecocksonline|Williams-Brice Stadium

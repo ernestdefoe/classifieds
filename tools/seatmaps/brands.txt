@@ -1,0 +1,82 @@
+Air Force|goairforcefalcons|Falcon Stadium
+Akron|gozips|InfoCision Stadium
+Arizona|arizonawildcats|Arizona Stadium
+Arkansas|arkansasrazorbacks|Donald W. Reynolds Razorback Stadium
+Auburn|auburntigers|Jordan-Hare Stadium
+Ball State|ballstatesports|Scheumann Stadium
+Baylor|baylorbears|McLane Stadium
+Boston College|bceagles|Alumni Stadium (Chestnut Hill, MA)
+Bowling Green|bgsufalcons|Doyt L. Perry Stadium
+Buffalo|ubbulls|Broadview Stadium
+California|calbears|California Memorial Stadium
+Clemson|clemsontigers|Memorial Stadium (Clemson, SC)
+Coastal|goccusports|Brooks Stadium (SC)
+Delaware|bluehens|Delaware Stadium
+Duke|goduke|Wallace Wade Stadium
+East Carolina|ecupirates|Dowdy-Ficklen Stadium
+Eastern Michigan|emueagles|Rynearson Stadium
+FIU|fiusports|Pitbull Stadium
+Fresno St|gobulldogs|Valley Children's Stadium
+GA Southern|gseagles|Allen E. Paulson Stadium
+Georgia Tech|ramblinwreck|Bobby Dodd Stadium
+Hawai'i|hawaiiathletics|Clarence T.C. Ching Athletics Complex
+Houston|uhcougars|TDECU Stadium
+Illinois|fightingillini|Gies Memorial Stadium
+Indiana|iuhoosiers|Memorial Stadium (Bloomington, IN)
+Iowa|hawkeyesports|Kinnick Stadium
+James Madison|jmusports|Bridgeforth Stadium
+Jax State|jsugamecocksports|AmFirst Stadium
+Kansas|kuathletics|David Booth Kansas Memorial Stadium
+Kennesaw St|ksuowls|Walens Family Field at Fifth Third Stadium
+Kent State|kentstatesports|Zoeller Field at Dix Stadium
+LSU|lsusports|Tiger Stadium (LA)
+Liberty|libertyflames|Williams Stadium (VA)
+MTSU|goblueraiders|Johnny "Red" Floyd Stadium
+Memphis|gotigersgo|Simmons Bank Liberty Stadium
+Miami OH|miamiredhawks|Yager Stadium
+Michigan|mgoblue|Michigan Stadium
+Michigan St|msuspartans|Spartan Stadium
+Minnesota|gophersports|Huntington Bank Stadium
+Mississippi St|hailstate|Davis Wade Stadium
+Missouri|mutigers|Memorial Stadium
+Missouri St|missouristatebears|Robert W. Plaster Stadium
+N Illinois|niuhuskies|Huskie Stadium
+Nebraska|huskers|Memorial Stadium (Lincoln, NE)
+Nevada|nevadawolfpack|Mackay Stadium
+New Mexico|golobos|University Stadium (NM)
+New Mexico St|nmstatesports|Aggie Memorial Stadium
+North Carolina|goheels|Kenan Stadium
+Notre Dame|und|Notre Dame Stadium
+Ohio|ohiobobcats|Peden Stadium
+Oklahoma|soonersports|Memorial Stadium (Norman, OK)
+Old Dominion|odusports|S.B. Ballard Stadium
+Ole Miss|olemisssports|Vaught-Hemingway Stadium
+Oregon St|osubeavers|Reser Stadium
+Penn State|gopsusports|Beaver Stadium
+Rice|riceowls|First Community Stadium
+Rutgers|scarletknights|SHI Stadium
+Sam Houston|gobearkats|Elliott T. Bowers Stadium
+South Alabama|usajaguars|Hancock Whitney Stadium
+Southern Miss|southernmiss|M. M. Roberts Stadium
+Stanford|gostanford|Stanford Stadium
+TCU|gofrogs|Amon G. Carter Stadium
+Texas|texassports|DKR-Texas Memorial Stadium
+Texas A&M|12thman|Kyle Field
+Texas Tech|texastech|Galaxy Stadium
+Toledo|utrockets|Glass Bowl
+Troy|troytrojans|Veterans Memorial Stadium (AL)
+Tulane|tulanegreenwave|Yulman Stadium
+Tulsa|tulsahurricane|H. A. Chapman Stadium
+UCLA|uclabruins|Rose Bowl
+UConn|uconnhuskies|Pratt & Whitney Stadium
+UL Monroe|ulmwarhawks|Malone Stadium
+USC|usctrojans|Los Angeles Memorial Coliseum
+UTEP|utepminers|Sun Bowl
+Utah|utahutes|Rice-Eccles Stadium
+Utah State|utahstateaggies|Maverik Stadium
+Vanderbilt|vucommodores|FirstBank Stadium
+Virginia|virginiasports|Scott Stadium
+Wake Forest|godeacs|Allegacy Federal Credit Union Stadium
+Washington|gohuskies|Husky Stadium
+West Virginia|wvusports|Milan Puskar Stadium
+Western KY|wkusports|Houchens Industries-L.T. Smith Stadium
