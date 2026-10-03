@@ -145,6 +145,11 @@ not listed, so a chart cannot reach the site without a person having seen it:
   lines them up — charts put **7-40%** of labels on a baseline shared by five
   or more, tables **73-96%**. All three guards together pass every real chart
   and refuse every document measured.
+- **🚨 "Judge by the answer" can still pick a document over the real chart.**
+  Tulsa publishes `Football-Map.png` beside a cross-country results PDF. The
+  chart is a raster image with no text layer and scored 0; the results sheet
+  scored 36, so it won. When a candidate list mixes images and PDFs, check
+  whether a plainly-named chart image was passed over.
 - **🚨 Do not guess which document is the chart — judge by the answer.**
   `chart_from_urls.py` fetches several candidates and keeps whichever traces
   best. A parking map scores 0 and loses on its own merits, with no rule

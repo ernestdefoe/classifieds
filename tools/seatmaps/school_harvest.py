@@ -18,8 +18,8 @@ return confidently wrong charts: Michigan's best match was once a real Michigan
 Stadium diagram drawn for a Liverpool v Manchester United match, with soccer
 pricing and both clubs printed on the field.
 """
-import json, os, re, random, subprocess, sys, time
-from urllib.parse import urljoin, urlparse
+import base64, json, os, re, random, subprocess, sys, time
+from urllib.parse import urljoin, urlparse, unquote, parse_qs
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pdf_trace
@@ -123,13 +123,41 @@ def links_in(html, base):
     return ranked
 
 
+def proxied_assets(html):
+    """The real files behind a CDN's resizing proxy.
+
+    🚨 Sidearm sites serve content images only through images.sidearmdev.com
+    (the source sits in a `url=` query parameter) or through an imgproxy path
+    that base64-encodes it. Michigan State's seat map and Auburn's stripe-out
+    chart are both reachable ONLY this way -- scanning for plain .jpg/.png
+    links finds the sponsor logos and misses the chart entirely.
+    """
+    out = []
+    for m in re.finditer(r'https?://images\.sidearmdev\.com/[a-z]+\?([^"\'<>\s]+)',
+                         html):
+        q = parse_qs(m.group(1))
+        if 'url' in q:
+            out.append(unquote(q['url'][0]))
+    for m in re.finditer(r'/imgproxy/[^"\'<>\s]*/([A-Za-z0-9_\-]{24,})', html):
+        for pad in ('', '=', '==', '==='):
+            try:
+                d = base64.urlsafe_b64decode(m.group(1) + pad).decode('utf-8')
+                if d.startswith('http'):
+                    out.append(d)
+                break
+            except Exception:
+                pass
+    return out
+
+
 def assets_in(html, page_url):
     """Every plausible document on a page, best first -- scored, never 'the
     first' and never 'the biggest'. Mirrors the extension's own
     SeatMapImporter::documentUrlWithin, plus the rejections above."""
     html = html.replace('\\/', '/')
     out = []
-    for cand in dict.fromkeys(ASSET.findall(html)):
+    found = list(ASSET.findall(html)) + proxied_assets(html)
+    for cand in dict.fromkeys(found):
         if cand.lower() == page_url.lower():
             continue
         path = (urlparse(cand).path or '').lower()
