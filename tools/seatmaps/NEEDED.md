@@ -1,85 +1,75 @@
-# Seating charts still wanted
+# Seating charts — final state
 
-Live: **82 charts, 76 a seller can pick, 2835 sections**.
+**95 charts, 89 a seller can pick, 3333 sections.**
 
-## What works
+Started the day at 68 / 61 / 2,091.
 
-A **vector PDF** from the school's own site — 30-110 sections, exactly placed.
-Find it with a search like:
+## How a chart gets found
 
 ```
-"seating chart" pdf site:<school-domain> <venue> football
+"pricing map" OR "seating chart" pdf site:<school>.com <venue> football
 ```
 
-The tell: open the PDF and try to **select the section numbers as text**. If they
-highlight, it will trace perfectly. If not, it is outlined artwork and OCR only
-works when the image is very large (Minnesota at 4109px worked; most do not).
+A school **ticket pricing map** drawn in Illustrator has live text and yields
+30–110 exact sections via `pdf_trace.py`. A gameday or facilities map is
+usually outlined artwork and yields nothing. OCR (`trace3.py`, tiled) only
+works when the image is large — Minnesota at 4109px worked, most do not.
 
-## Already checked — these publish nothing usable
+## Checked and ruled out (46)
+
+Re-hunting these is wasted effort unless the school republishes.
 
 | School | Ground | Why |
 |---|---|---|
-| Boston College | Alumni Stadium (Chestnut Hill, MA) | chart found; no text layer, OCR unusable |
-| California | California Memorial Stadium | chart found; no text layer, OCR unusable |
-| Duke | Wallace Wade Stadium | chart found; no text layer, OCR unusable |
+| Air Force | Falcon Stadium | only a 1071x722 image, too small |
+| Akron | InfoCision Stadium | ticket page 404s |
+| Arizona | Arizona Stadium | chart numbers are outlines; only the price table has text |
+| Boston College | Alumni Stadium (Chestnut Hill, MA) | chart found, no text layer, OCR unusable |
+| Bowling Green | Doyt L. Perry Stadium | no chart asset reachable |
+| Buffalo | Broadview Stadium | no chart asset reachable |
+| California | California Memorial Stadium | chart found, no text layer, OCR unusable |
+| Coastal | Brooks Stadium (SC) | ticket page 404s |
+| Duke | Wallace Wade Stadium | chart found, no text layer, OCR unusable |
+| East Carolina | Dowdy-Ficklen Stadium | interactive viewer only |
+| FIU | Pitbull Stadium | no chart asset reachable |
 | Fresno St | Valley Children's Stadium | interactive viewer only |
-| Iowa | Kinnick Stadium | chart found; no text layer, OCR gives ~2 |
-| LSU | Tiger Stadium (LA) | interactive viewer only, no downloadable chart |
-| Michigan St | Spartan Stadium | chart found; no text layer, OCR unusable |
+| GA Southern | Allen E. Paulson Stadium | only a parking map |
+| Hawai'i | Clarence T.C. Ching Athletics Complex | no chart document published |
+| Iowa | Kinnick Stadium | chart found, no text layer, OCR unusable |
+| Jax State | AmFirst Stadium | ticket page 404s |
+| Kansas | David Booth Kansas Memorial Stadium | only a gate-access map, not a seating chart |
+| Kennesaw St | Walens Family Field at Fifth Third Stadium | no chart asset reachable |
+| Kent State | Zoeller Field at Dix Stadium | no chart asset reachable |
+| LSU | Tiger Stadium (LA) | interactive 3D viewer only |
+| MTSU | Johnny "Red" Floyd Stadium | no chart asset reachable |
+| Miami OH | Yager Stadium | no chart asset reachable |
+| Michigan St | Spartan Stadium | chart found, no text layer, OCR unusable |
 | Missouri | Memorial Stadium | the indexed seating-chart PDF 404s |
-| Nebraska | Memorial Stadium (Lincoln, NE) | chart found; its section numbers are vector outlines, OCR gives ~5 |
-| North Carolina | Kenan Stadium | chart found; no text layer, OCR gives ~7 |
-| Ole Miss | Vaught-Hemingway Stadium | no chart PDF indexed |
-| Texas A&M | Kyle Field | only a 2019 priority-seating PDF, which does not fetch |
-| UCLA | Rose Bowl | season-ticket PDF is outlined artwork, OCR unusable |
+| Missouri St | Robert W. Plaster Stadium | ticket page 404s |
+| N Illinois | Huskie Stadium | no chart asset reachable |
+| Nebraska | Memorial Stadium (Lincoln, NE) | section numbers are vector outlines; only gates/rows/suites are text |
+| Nevada | Mackay Stadium | good map, OCR returns junk |
+| New Mexico | University Stadium (NM) | no chart document published |
+| New Mexico St | Aggie Memorial Stadium | no chart asset reachable |
+| North Carolina | Kenan Stadium | chart found, no text layer, OCR gives ~7 |
+| Old Dominion | S.B. Ballard Stadium | chart found, no text layer, OCR junk |
+| Ole Miss | Vaught-Hemingway Stadium | no chart document published |
+| Rutgers | SHI Stadium | chart found, no text layer |
+| Sam Houston | Elliott T. Bowers Stadium | no chart asset reachable |
+| South Alabama | Hancock Whitney Stadium | no chart asset reachable |
+| Southern Miss | M. M. Roberts Stadium | only a parking map |
+| Texas A&M | Kyle Field | only a 2019 priority map that will not fetch |
+| Toledo | Glass Bowl | no chart asset reachable |
+| UCLA | Rose Bowl | season-ticket PDF is outlined artwork |
+| UL Monroe | Malone Stadium | no chart asset reachable |
+| UTEP | Sun Bowl | no chart document published |
 | Vanderbilt | FirstBank Stadium | interactive 3D viewer only |
+| Virginia | Scott Stadium | only a lacrosse pricing map |
+| Wake Forest | Allegacy Federal Credit Union Stadium | no chart asset reachable |
+| West Virginia | Milan Puskar Stadium | chart found, no text layer |
 
-## Not yet searched (45)
+## What is left
 
-| School | Ground | Site |
-|---|---|---|
-| Air Force | Falcon Stadium | goairforcefalcons.com |
-| Akron | InfoCision Stadium | gozips.com |
-| Arizona | Arizona Stadium | arizonawildcats.com |
-| Bowling Green | Doyt L. Perry Stadium | bgsufalcons.com |
-| Buffalo | Broadview Stadium | ubbulls.com |
-| Coastal | Brooks Stadium (SC) | goccusports.com |
-| East Carolina | Dowdy-Ficklen Stadium | ecupirates.com |
-| FIU | Pitbull Stadium | fiusports.com |
-| GA Southern | Allen E. Paulson Stadium | gseagles.com |
-| Hawai'i | Clarence T.C. Ching Athletics Complex | hawaiiathletics.com |
-| Indiana | Memorial Stadium (Bloomington, IN) | iuhoosiers.com |
-| Jax State | AmFirst Stadium | jsugamecocksports.com |
-| Kansas | David Booth Kansas Memorial Stadium | kuathletics.com |
-| Kennesaw St | Walens Family Field at Fifth Third Stadium | ksuowls.com |
-| Kent State | Zoeller Field at Dix Stadium | kentstatesports.com |
-| Liberty | Williams Stadium (VA) | libertyflames.com |
-| MTSU | Johnny "Red" Floyd Stadium | goblueraiders.com |
-| Miami OH | Yager Stadium | miamiredhawks.com |
-| Mississippi St | Davis Wade Stadium | hailstate.com |
-| Missouri St | Robert W. Plaster Stadium | missouristatebears.com |
-| N Illinois | Huskie Stadium | niuhuskies.com |
-| Nevada | Mackay Stadium | nevadawolfpack.com |
-| New Mexico | University Stadium (NM) | golobos.com |
-| New Mexico St | Aggie Memorial Stadium | nmstatesports.com |
-| Old Dominion | S.B. Ballard Stadium | odusports.com |
-| Oregon St | Reser Stadium | osubeavers.com |
-| Rice | First Community Stadium | riceowls.com |
-| Rutgers | SHI Stadium | scarletknights.com |
-| Sam Houston | Elliott T. Bowers Stadium | gobearkats.com |
-| South Alabama | Hancock Whitney Stadium | usajaguars.com |
-| Southern Miss | M. M. Roberts Stadium | southernmiss.com |
-| Stanford | Stanford Stadium | gostanford.com |
-| TCU | Amon G. Carter Stadium | gofrogs.com |
-| Texas Tech | Galaxy Stadium | texastech.com |
-| Toledo | Glass Bowl | utrockets.com |
-| Troy | Veterans Memorial Stadium (AL) | troytrojans.com |
-| Tulane | Yulman Stadium | tulanegreenwave.com |
-| Tulsa | H. A. Chapman Stadium | tulsahurricane.com |
-| UConn | Pratt & Whitney Stadium | uconnhuskies.com |
-| UL Monroe | Malone Stadium | ulmwarhawks.com |
-| UTEP | Sun Bowl | utepminers.com |
-| Utah State | Maverik Stadium | utahstateaggies.com |
-| Virginia | Scott Stadium | virginiasports.com |
-| Wake Forest | Allegacy Federal Credit Union Stadium | godeacs.com |
-| West Virginia | Milan Puskar Stadium | wvusports.com |
+These grounds publish nothing machine-readable. The admin tracer handles them
+at roughly 2–3 seconds per section — a few minutes per ground — and is worth
+spending only on the venues your members actually sell tickets for.
