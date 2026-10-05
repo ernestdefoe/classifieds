@@ -31,7 +31,10 @@ use Flarum\User\User;
 return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
-        ->css(__DIR__.'/less/forum.less'),
+        ->css(__DIR__.'/less/forum.less')
+        // 🚨 The landing page was a browser-only route: following a link worked,
+        // but opening, refreshing or sharing /classifieds was a 404.
+        ->route('/classifieds', 'classifieds'),
 
     (new Extend\Frontend('admin'))
         ->js(__DIR__.'/js/dist/admin.js')
