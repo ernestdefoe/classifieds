@@ -6,6 +6,7 @@ import Stream from 'flarum/common/utils/Stream';
 import type Discussion from 'flarum/common/models/Discussion';
 import type Mithril from 'mithril';
 
+import { seatMaps } from '../../common/utils/seatMaps';
 import labelText from '../../common/utils/labelText';
 
 export interface EditListingModalAttrs extends IFormModalAttrs {
@@ -24,7 +25,7 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
   seatmapId!: Stream<string>;
 
   seatMaps(): any[] {
-    return app.forum.attribute<any[]>('classifiedsSeatMaps') || [];
+    return seatMaps();
   }
 
   oninit(vnode: Mithril.Vnode<EditListingModalAttrs, this>) {
@@ -118,7 +119,14 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
             {/* Only when charts exist — see the note on the composer's picker. */}
             {this.seatMaps().length > 0 && [
               <label>{app.translator.trans('flarum-classifieds.forum.composer.seatmap_label')}</label>,
-              <select className="FormControl" bidi={this.seatmapId}>
+              // Not bidi: bidi marks the selected option by walking the
+              // select's children, and the mapped options arrive as one nested
+              // array with no attrs, which threw and blanked the whole modal.
+              <select
+                className="FormControl"
+                value={this.seatmapId()}
+                onchange={(e: Event) => this.seatmapId((e.target as HTMLSelectElement).value)}
+              >
                 <option value="">{app.translator.trans('flarum-classifieds.forum.composer.seatmap_none')}</option>
                 {this.seatMaps().map((map: any) => (
                   <option value={String(map.id)} key={map.id}>

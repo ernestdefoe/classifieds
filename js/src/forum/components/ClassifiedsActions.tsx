@@ -3,6 +3,7 @@ import Component, { ComponentAttrs } from 'flarum/common/Component';
 import Button from 'flarum/common/components/Button';
 import type Discussion from 'flarum/common/models/Discussion';
 import type Mithril from 'mithril';
+import { loadSeatMaps } from '../../common/utils/seatMaps';
 
 export interface ClassifiedsActionsAttrs extends ComponentAttrs {
   discussion: Discussion;
@@ -42,9 +43,7 @@ export default class ClassifiedsActions extends Component<ClassifiedsActionsAttr
             className="Button Button--primary ClassifiedsActions-primary"
             icon="fas fa-pencil-alt"
             onclick={() => {
-              import('./EditListingModal').then((m) => {
-                app.modal.show(m.default, { discussion });
-              });
+              app.modal.show(() => Promise.all([import('./EditListingModal'), loadSeatMaps()]).then(([mod]) => mod), { discussion });
             }}
           >
             {app.translator.trans('flarum-classifieds.forum.discussion_controls.edit_listing_button')}

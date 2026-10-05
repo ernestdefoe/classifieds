@@ -1,8 +1,35 @@
 import app from 'flarum/forum/app';
 import { extend, override } from 'flarum/common/extend';
 
-import ListingComposerFields, { ListingFields } from './components/ListingComposerFields';
+import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
+import type { ListingFields } from './components/ListingComposerFields';
 import uploadListingImage from '../common/utils/uploadListingImage';
+import { loadSeatMaps } from '../common/utils/seatMaps';
+
+/**
+ * The listing fields (and their image uploader) are a chunk fetched the first
+ * time someone composes in a classifieds tag, with the seat charts they offer;
+ * neither is part of every page.
+ */
+let ListingComposerFields: any = null;
+let fieldsRequested = false;
+
+function listingFieldsComponent(): any {
+  if (!ListingComposerFields && !fieldsRequested) {
+    fieldsRequested = true;
+    Promise.all([import('./components/ListingComposerFields'), loadSeatMaps()]).then(
+      ([mod]) => {
+        ListingComposerFields = mod.default;
+        m.redraw();
+      },
+      () => {
+        fieldsRequested = false;
+      }
+    );
+  }
+
+  return ListingComposerFields;
+}
 
 interface TagWithClassifieds {
   isClassifieds?: () => boolean;
@@ -63,9 +90,11 @@ export default function addListingComposer(): void {
 
     ensureListingState(this.composer);
 
+    const Fields = listingFieldsComponent();
+
     items.add(
       'classifieds',
-      <ListingComposerFields composer={this.composer} />,
+      Fields ? <Fields composer={this.composer} /> : <LoadingIndicator display="inline" size="small" />,
       -10
     );
   });

@@ -9,9 +9,9 @@ use Flarum\Api\Resource;
 use Flarum\Classifieds\Access;
 use Flarum\Classifieds\Api\Controller\ListingScreenshotsController;
 use Flarum\Classifieds\Api\Controller\SeatMapController;
+use Flarum\Classifieds\Api\Controller\OfferedSeatMapsController;
 use Flarum\Classifieds\Api\Controller\SeatMapsController;
 use Flarum\Classifieds\Api\DiscussionResourceFields;
-use Flarum\Classifieds\Api\ForumResourceFields;
 use Flarum\Classifieds\Api\TagResourceFields;
 use Flarum\Classifieds\Api\UserResourceFields;
 use Flarum\Classifieds\Console\PruneListingsCommand;
@@ -31,6 +31,8 @@ use Flarum\User\User;
 return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
+        // The landing page and the modals are chunks fetched on first use.
+        ->jsDirectory(__DIR__.'/js/dist/forum')
         ->css(__DIR__.'/less/forum.less')
         // 🚨 The landing page was a browser-only route: following a link worked,
         // but opening, refreshing or sharing /classifieds was a 404.
@@ -96,9 +98,6 @@ return [
     (new Extend\ApiResource(Resource\UserResource::class))
         ->fields(UserResourceFields::class),
 
-    (new Extend\ApiResource(Resource\ForumResource::class))
-        ->fields(ForumResourceFields::class),
-
     (new Extend\Conditional())
         ->whenExtensionEnabled('flarum-tags', fn () => [
             (new Extend\ApiResource(\Flarum\Tags\Api\Resource\TagResource::class))
@@ -137,6 +136,7 @@ return [
         )
         ->get('/classifieds/seatmaps', 'classifieds.seatmaps.index', SeatMapsController::class)
         ->post('/classifieds/seatmaps', 'classifieds.seatmaps.create', SeatMapsController::class)
+        ->get('/classifieds/seatmaps/offered', 'classifieds.seatmaps.offered', OfferedSeatMapsController::class)
         ->get('/classifieds/seatmaps/{id:[0-9]+}', 'classifieds.seatmaps.show', SeatMapController::class)
         ->patch('/classifieds/seatmaps/{id:[0-9]+}', 'classifieds.seatmaps.update', SeatMapController::class)
         ->delete('/classifieds/seatmaps/{id:[0-9]+}', 'classifieds.seatmaps.delete', SeatMapController::class),

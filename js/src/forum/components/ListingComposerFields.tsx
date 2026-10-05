@@ -3,6 +3,7 @@ import Component, { ComponentAttrs } from 'flarum/common/Component';
 import classList from 'flarum/common/utils/classList';
 import type Mithril from 'mithril';
 
+import { seatMaps } from '../../common/utils/seatMaps';
 import labelText from '../../common/utils/labelText';
 import ListingImageUploader, { PendingImage } from './ListingImageUploader';
 
@@ -302,7 +303,7 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
 
   /** The stadium charts an admin has actually traced. */
   seatMaps(): any[] {
-    return app.forum.attribute<any[]>('classifiedsSeatMaps') || [];
+    return seatMaps();
   }
 
   showSeatFields(): boolean {

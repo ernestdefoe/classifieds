@@ -10,7 +10,6 @@ import ClassifiedsHeroCarousel from './components/ClassifiedsHeroCarousel';
 import ClassifiedsBreadcrumb from './components/ClassifiedsBreadcrumb';
 import ClassifiedsActions from './components/ClassifiedsActions';
 import ClassifiedsSellerCard from './components/ClassifiedsSellerCard';
-import SeatMapModal from './components/SeatMapModal';
 
 /**
  * For classifieds discussions we replace the entire DiscussionHero with a 2-column,
@@ -98,7 +97,7 @@ export default function addListingHeroBadge(): void {
                 <ClassifiedsHeroCarousel
                   images={images}
                   seatMap={seatMap}
-                  onExpandMap={() => app.modal.show(SeatMapModal, { discussion })}
+                  onExpandMap={() => app.modal.show(() => import('./components/SeatMapModal'), { discussion })}
                   alt={discussion.title()}
                 />
               ) : (

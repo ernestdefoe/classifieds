@@ -1,8 +1,6 @@
 import Extend from 'flarum/common/extenders';
 
-import ClassifiedsLandingPage from './components/ClassifiedsLandingPage';
-
 export default [
   new Extend.Routes() //
-    .add('classifieds', '/classifieds', ClassifiedsLandingPage),
+    .add('classifieds', '/classifieds', () => import('./components/ClassifiedsLandingPage')),
 ];

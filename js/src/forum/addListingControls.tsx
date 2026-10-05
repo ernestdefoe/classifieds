@@ -4,8 +4,7 @@ import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 import DiscussionPage from 'flarum/forum/components/DiscussionPage';
 import Button from 'flarum/common/components/Button';
 import type Discussion from 'flarum/common/models/Discussion';
-
-import EditListingModal from './components/EditListingModal';
+import { loadSeatMaps } from '../common/utils/seatMaps';
 
 function isActive(discussion: Discussion): boolean {
   return (discussion.listingStatus() || 'active') === 'active';
@@ -84,6 +83,6 @@ export default function addListingControls(): void {
   };
 
   Controls.editListingAction = function () {
-    app.modal.show(EditListingModal, { discussion: this });
+    app.modal.show(() => Promise.all([import('./components/EditListingModal'), loadSeatMaps()]).then(([mod]) => mod), { discussion: this });
   };
 }

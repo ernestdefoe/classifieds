@@ -77,16 +77,11 @@ flarum-classifieds:
       bump_listing_label: Bump own listing
       edit_listing_label: Edit own listing fields
 
-    edit_tag:
-      is_classifieds_label: This tag is a classifieds tag
-      is_classifieds_help: Discussions in this tag will require classifieds metadata.
-
   ##
   # FORUM
   ##
   forum:
     composer:
-      section_title: Classifieds details
       label_label: Listing type
       label_placeholder: Choose a label…
       price_label: Price
@@ -102,34 +97,17 @@ flarum-classifieds:
       seatmap_label: Stadium
       seatmap_none: "No seating chart"
       location_placeholder: City, state, country…
-      configure_listing_button: Configure listing details
 
     seatmap:
       title: Seating chart
-      open: Where are these seats?
       unavailable: No seating chart is available for this listing.
       marker: "Section {section}"
       not_marked: "Section {section} has not been marked on this chart yet."
 
-    start_listing:
-      title: New classifieds listing
-      help: This discussion is in a classifieds tag. Fill the details for your listing — you can edit them later.
-      continue_button: Continue
-
     classifieds_composer:
-      title_placeholder: Listing title (e.g. iPhone 15 Pro 256GB)
-      body_placeholder: "Describe your listing: condition, details, contact preference…"
       label_required: Please pick a listing label.
       price_required: Please enter a price for the listing.
       location_required: Please enter a location.
-
-    create_listing:
-      title: New classifieds listing
-      title_label: Title
-      description_label: Description
-      submit_button: Publish listing
-      title_required: Please enter a title.
-      description_required: Please enter a description.
 
     edit_listing:
       title: Edit listing

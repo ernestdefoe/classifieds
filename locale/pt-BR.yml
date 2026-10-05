@@ -25,13 +25,8 @@ flarum-classifieds:
       bump_listing_label: Repostar (bump) próprio anúncio
       edit_listing_label: Editar campos do próprio anúncio
 
-    edit_tag:
-      is_classifieds_label: Esta tag é uma tag de classificados
-      is_classifieds_help: Discussões nesta tag exigirão dados de anúncio.
-
   forum:
     composer:
-      section_title: Detalhes do anúncio
       label_label: Tipo de anúncio
       label_placeholder: Escolha um rótulo…
       price_label: Preço
@@ -39,27 +34,11 @@ flarum-classifieds:
       currency_label: Moeda
       location_label: Localização
       location_placeholder: Cidade, estado, país…
-      configure_listing_button: Configurar dados do anúncio
-
-    start_listing:
-      title: Novo anúncio
-      help: Esta discussão está numa tag de classificados. Preencha os dados do anúncio — você pode editar depois.
-      continue_button: Continuar
 
     classifieds_composer:
-      title_placeholder: "Título do anúncio (ex.: iPhone 15 Pro 256GB)"
-      body_placeholder: "Descreva o anúncio: estado, detalhes, contato…"
       label_required: Selecione um rótulo para o anúncio.
       price_required: Informe um preço para o anúncio.
       location_required: Informe a localização.
-
-    create_listing:
-      title: Novo anúncio
-      title_label: Título
-      description_label: Descrição
-      submit_button: Publicar anúncio
-      title_required: Informe um título.
-      description_required: Informe uma descrição.
 
     edit_listing:
       title: Editar anúncio

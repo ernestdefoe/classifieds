@@ -198,9 +198,7 @@
   }
 }
 
-.EditListingModal,
-.StartListingModal,
-.CreateListingModal {
+.EditListingModal {
   .Form-group { margin-bottom: 12px; }
 
   .required {
@@ -214,30 +212,6 @@
   }
 }
 
-.ComposerBody--classifieds-discussion {
-  .ComposerBody-header {
-    .ClassifiedsComposer {
-      width: 100%;
-      margin-bottom: 8px;
-    }
-  }
-}
-
-.DiscussionComposer-classifieds {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(21, 183, 21, 0.12);
-  color: @classifieds-active;
-  font-weight: 600;
-  font-size: 12px;
-
-  &:hover {
-    background: rgba(21, 183, 21, 0.2);
-  }
-}
 
 // ─── Image uploader (drop-zone + thumbs) ────────────────────────────────
 
@@ -1327,39 +1301,6 @@
   }
 }
 
-.ClassifiedsHero-seatMapLink {
-  margin-left: 8px;
-  padding: 0;
-  font-size: 90%;
-  font-weight: 600;
-  /*
-   * 🚨 Pinned to two literals, one per scheme, and NOT to --link-color.
-   *
-   * Measured against the hero's real background: the theme's link colour came
-   * out at 3.94:1 in dark mode, below the 4.5:1 floor for body text. One
-   * hardcoded value cannot fix that — against white the colour has to be dark
-   * enough (luminance <= 0.183) and against the dark hero light enough
-   * (>= 0.218), and no colour is both. So it is two, each measured.
-   */
-  color: #b3122c !important;
-
-  i {
-    margin-right: 4px;
-  }
-}
-
-[data-theme='dark'] .ClassifiedsHero-seatMapLink {
-  color: #ff8f9c !important;
-}
-
-// The same pair for anyone whose browser asks for dark but whose theme has not
-// set the attribute.
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .ClassifiedsHero-seatMapLink {
-    color: #ff8f9c !important;
-  }
-}
-
 .ClassifiedsSeatMap {
   text-align: center;
 
@@ -1548,8 +1489,7 @@ body.composing-classifieds .Composer {
 // The photo well was 142px of the 300 the composer had. It says the same thing
 // in half the space, and the space is what was missing.
 .ClassifiedsComposer .ListingImageUploader-dropzone,
-.ClassifiedsComposer [class*='Uploader'] .Dropzone,
-.ClassifiedsComposer-images {
+.ClassifiedsComposer [class*='Uploader'] .Dropzone {
   padding-top: 14px;
   padding-bottom: 14px;
 }
