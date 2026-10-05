@@ -53,7 +53,9 @@ class DiscussionPolicy extends AbstractPolicy
             return $this->allow();
         }
 
-        return null;
+        // An explicit no: core's catch-all discussion policy would otherwise
+        // grant `discussion.bumpListing` holders this on EVERY listing.
+        return $actor->isAdmin() ? null : $this->deny();
     }
 
     public function editListing(User $actor, Discussion $discussion): string|bool|null
@@ -70,7 +72,9 @@ class DiscussionPolicy extends AbstractPolicy
             return $this->allow();
         }
 
-        return null;
+        // As above: the permission means "edit your OWN listing", not
+        // everyone's, so the catch-all must not turn it into that.
+        return $this->deny();
     }
 
     protected function isClassifieds(Discussion $discussion): bool

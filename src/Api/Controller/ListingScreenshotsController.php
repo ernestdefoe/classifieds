@@ -48,28 +48,28 @@ class ListingScreenshotsController implements RequestHandlerInterface
         $listing = Listing::query()->where('discussion_id', $id)->first();
 
         // Listing pode não existir ainda — cria-se on-the-fly se a discussão
-        // existe e o ator é dono / pode editar. Isso permite upload imediato
+        // existe e o ator pode editar o anúncio. Isso permite upload imediato
         // após o save da discussion (quando ainda nem temos o registro
         // completo do anúncio criado pelo afterSave).
+        //
+        // Only through the editListing policy (the owner with the permission,
+        // or someone who can edit the discussion), only on a classifieds
+        // discussion the actor can see, and never on an orphaned listing.
+        $discussion = \Flarum\Discussion\Discussion::query()->whereVisibleTo($actor)->find($listing ? $listing->discussion_id : $id);
+        if (! $discussion) {
+            throw new RouteNotFoundException();
+        }
+
+        if (! $discussion->tags->contains(fn ($tag) => (bool) ($tag->is_classifieds ?? false))
+            || ! $actor->can('editListing', $discussion)) {
+            throw new PermissionDeniedException();
+        }
+
         if (! $listing) {
-            $discussion = \Flarum\Discussion\Discussion::find($id);
-            if (! $discussion) {
-                throw new RouteNotFoundException();
-            }
-
-            if ($discussion->user_id !== $actor->id && ! $actor->can('editListing', $discussion)) {
-                throw new PermissionDeniedException();
-            }
-
             $listing = new Listing();
             $listing->discussion_id = $discussion->id;
             $listing->status = Listing::STATUS_ACTIVE;
             $listing->save();
-        } else {
-            $discussion = $listing->discussion;
-            if ($discussion && $discussion->user_id !== $actor->id && ! $actor->can('editListing', $discussion)) {
-                throw new PermissionDeniedException();
-            }
         }
 
         $method = strtoupper($request->getMethod());
