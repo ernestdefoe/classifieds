@@ -3,3 +3,4 @@
 /tools          export-ignore
 /.gitattributes export-ignore
 /.github        export-ignore
+/.claude        export-ignore
