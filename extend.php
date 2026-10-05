@@ -57,6 +57,7 @@ return [
         ->default('flarum-classifieds.require_price', '1')
         ->default('flarum-classifieds.require_location', '0')
         ->default('flarum-classifieds.allow_price_range', '1')
+        ->default('flarum-classifieds.bump_cooldown_hours', '24')
         ->default('flarum-classifieds.auto_prune_days', '0')
         ->default('flarum-classifieds.auto_prune_sold', '0')
         ->default('flarum-classifieds.allowed_labels', 'iso,wtb,wts,trade')

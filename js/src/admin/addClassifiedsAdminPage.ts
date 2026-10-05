@@ -112,6 +112,16 @@ export default function addClassifiedsAdminPage(): void {
     )
     .registerSetting(
       {
+        setting: 'flarum-classifieds.bump_cooldown_hours',
+        type: 'number',
+        min: 0,
+        label: trans('bump_cooldown_hours_label'),
+        help: trans('bump_cooldown_hours_help'),
+      } as any,
+      65
+    )
+    .registerSetting(
+      {
         setting: 'flarum-classifieds.auto_prune_days',
         type: 'number',
         min: 0,

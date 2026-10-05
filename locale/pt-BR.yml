@@ -15,6 +15,8 @@ flarum-classifieds:
       require_label_label: Exigir rótulo
       require_price_label: Exigir preço
       require_location_label: Exigir localização
+      bump_cooldown_hours_label: Horas entre repostagens
+      bump_cooldown_hours_help: Quanto tempo o vendedor espera antes de repostar o mesmo anúncio. 0 remove o limite.
       auto_prune_days_label: Remover anúncios após N dias
       auto_prune_days_help: "Remove anúncios mais antigos que N dias. 0 desativa."
       auto_prune_sold_label: Remover anúncios vendidos

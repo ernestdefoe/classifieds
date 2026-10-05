@@ -23,6 +23,8 @@ flarum-classifieds:
       require_label_label: Require a listing label
       require_price_label: Require a price
       require_location_label: Require a location
+      bump_cooldown_hours_label: Hours between bumps
+      bump_cooldown_hours_help: How long a seller waits before bumping the same listing again. 0 removes the limit.
       auto_prune_days_label: Auto-prune after N days
       auto_prune_days_help: Delete listings older than this many days. 0 disables.
       auto_prune_sold_label: Auto-prune sold listings
