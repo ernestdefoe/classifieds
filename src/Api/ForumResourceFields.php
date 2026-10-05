@@ -26,15 +26,7 @@ class ForumResourceFields
              * before anyone can choose it.
              */
             Schema\Arr::make('classifiedsSeatMaps')
-                ->get(function () {
-                    return SeatMap::query()
-                        ->orderBy('title')
-                        ->get()
-                        ->filter(fn (SeatMap $m) => $m->sectionCount() > 0 && filled($m->image_path))
-                        ->map(fn (SeatMap $m) => $m->toSummary())
-                        ->values()
-                        ->all();
-                }),
+                ->get(fn () => SeatMap::offered()),
         ];
     }
 }

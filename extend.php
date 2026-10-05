@@ -26,6 +26,7 @@ use Flarum\Classifieds\Post\ListingStatusChangedPost;
 use Flarum\Discussion\Discussion;
 use Flarum\Extend;
 use Flarum\Tags\Tag;
+use Flarum\User\User;
 
 return [
     (new Extend\Frontend('forum'))
@@ -66,6 +67,22 @@ return [
 
     (new Extend\Model(Discussion::class))
         ->hasOne('listing', Listing::class, 'discussion_id'),
+
+    // A member's visible classifieds listings. Exists so the seller card's
+    // count can be a relation aggregate (one grouped query per response)
+    // rather than a COUNT per serialized user — see UserResourceFields.
+    (new Extend\Model(User::class))
+        ->relationship('classifiedsListings', fn (User $user) => $user
+            ->hasMany(Discussion::class, 'user_id')
+            ->whereNull('discussions.hidden_at')
+            ->where('discussions.is_private', false)
+            ->whereExists(function ($q) {
+                $q->select($q->raw(1))
+                    ->from('discussion_tag')
+                    ->join('tags', 'tags.id', '=', 'discussion_tag.tag_id')
+                    ->whereColumn('discussion_tag.discussion_id', 'discussions.id')
+                    ->where('tags.is_classifieds', 1);
+            })),
 
     (new Extend\ApiResource(Resource\DiscussionResource::class))
         ->fields(DiscussionResourceFields::class)

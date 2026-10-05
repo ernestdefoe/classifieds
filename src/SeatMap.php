@@ -8,6 +8,7 @@ namespace Flarum\Classifieds;
 
 use Carbon\Carbon;
 use Flarum\Database\AbstractModel;
+use Illuminate\Contracts\Cache\Repository;
 
 /**
  * A stadium seating chart and the traced position of each of its sections.
@@ -40,6 +41,43 @@ class SeatMap extends AbstractModel
         'image_height',
         'sections',
     ];
+
+    /** Cache key for the list the composer offers; see offered(). */
+    public const OFFERED_CACHE_KEY = 'classifieds.seatmaps.offered';
+
+    /**
+     * Any change to a chart changes what the composer may offer, so the cached
+     * list goes with it.
+     */
+    protected static function booted(): void
+    {
+        $forget = fn () => resolve(Repository::class)->forget(self::OFFERED_CACHE_KEY);
+
+        static::saved($forget);
+        static::deleted($forget);
+    }
+
+    /**
+     * The charts a seller may pick from — only traced ones with an image.
+     *
+     * 🚨 Cached. This rides on the forum payload, so it was a full read of
+     * the seat-map table, every chart's section JSON included, on every page
+     * load and every API request for the forum, by every visitor — to ship
+     * a list that only changes when an admin traces a chart. Saving or
+     * deleting a chart clears it; the TTL is only a backstop.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public static function offered(): array
+    {
+        return resolve(Repository::class)->remember(self::OFFERED_CACHE_KEY, 86400, fn () => static::query()
+            ->orderBy('title')
+            ->get()
+            ->filter(fn (SeatMap $m) => $m->sectionCount() > 0 && filled($m->image_path))
+            ->map(fn (SeatMap $m) => $m->toSummary())
+            ->values()
+            ->all());
+    }
 
     public function imageUrl(): ?string
     {

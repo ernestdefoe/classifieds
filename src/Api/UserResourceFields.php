@@ -7,42 +7,27 @@
 namespace Flarum\Classifieds\Api;
 
 use Flarum\Api\Schema;
-use Flarum\Discussion\Discussion;
-use Flarum\User\User;
 
 class UserResourceFields
 {
-    /** Per-request cache to avoid running the COUNT query for the same user multiple times. */
-    protected static array $cache = [];
-
     public function __invoke(): array
     {
         return [
+            /*
+             * 🚨 A relation aggregate, not a getter that counts.
+             *
+             * Every serialized user carries this field — post authors, the
+             * last poster of each discussion, everyone on a user list — and a
+             * getter ran one COUNT per user: 20 extra queries on a 20-member
+             * page. countRelation() goes through core's EloquentBuffer, which
+             * counts every user in the response in one grouped query whatever
+             * include path they arrived by.
+             *
+             * The relation (User::classifiedsListings, extend.php) carries the
+             * "visible classifieds discussion" constraints itself.
+             */
             Schema\Integer::make('classifiedsListingsCount')
-                ->get(fn (User $user) => $this->countListings($user)),
+                ->countRelation('classifiedsListings'),
         ];
-    }
-
-    protected function countListings(User $user): int
-    {
-        $id = (int) $user->id;
-        if (isset(static::$cache[$id])) {
-            return static::$cache[$id];
-        }
-
-        $count = Discussion::query()
-            ->where('user_id', $id)
-            ->whereNull('hidden_at')
-            ->where('is_private', false)
-            ->whereExists(function ($q) {
-                $q->select($q->raw(1))
-                    ->from('discussion_tag')
-                    ->join('tags', 'tags.id', '=', 'discussion_tag.tag_id')
-                    ->whereColumn('discussion_tag.discussion_id', 'discussions.id')
-                    ->where('tags.is_classifieds', 1);
-            })
-            ->count();
-
-        return static::$cache[$id] = $count;
     }
 }
