@@ -380,7 +380,17 @@ class SeatMapImporter
             throw new SeatMapImportException('bad_url');
         }
 
-        $ips = @gethostbynamel($parts['host']) ?: [];
+        // A host written only in digits, dots and hex marks must be a plain
+        // dotted quad. gethostbynamel() reads 0177.0.0.1 as decimal (a public
+        // 177.x address) while curl reads it as octal (127.0.0.1), so any
+        // other spelling of a number is refused rather than second-guessed.
+        $host = $parts['host'];
+        if (preg_match('/^(0x[0-9a-f]*|[0-9]+)(\.(0x[0-9a-f]*|[0-9]+))*\.?$/i', $host)
+            && filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) === false) {
+            throw new SeatMapImportException('bad_url');
+        }
+
+        $ips = @gethostbynamel($host) ?: [];
 
         if (! $ips) {
             throw new SeatMapImportException('bad_url');
