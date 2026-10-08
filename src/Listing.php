@@ -24,6 +24,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int|null $seatmap_id
+ * @property string|null $section
+ * @property string|null $row
+ * @property string|null $seats
+ * @property array|null $screenshots
  * @property SeatMap|null $seatMap
  * @property Discussion $discussion
  */

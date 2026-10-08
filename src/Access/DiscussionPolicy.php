@@ -87,6 +87,6 @@ class DiscussionPolicy extends AbstractPolicy
             $discussion->load('tags');
         }
 
-        return $discussion->tags->contains(fn ($tag) => (bool) ($tag->is_classifieds ?? false));
+        return $discussion->getAttribute('tags')->contains(fn ($tag) => (bool) ($tag->is_classifieds ?? false));
     }
 }

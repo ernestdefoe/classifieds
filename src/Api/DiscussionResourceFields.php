@@ -177,7 +177,7 @@ class DiscussionResourceFields
             $discussion->load('tags');
         }
 
-        return $discussion->tags->contains(fn ($tag) => (bool) ($tag->is_classifieds ?? false));
+        return $discussion->getAttribute('tags')->contains(fn ($tag) => (bool) ($tag->is_classifieds ?? false));
     }
 
     /**
@@ -201,7 +201,7 @@ class DiscussionResourceFields
         }
 
         $discussion->unsetRelation('tags');
-        $tags = $discussion->tags;
+        $tags = $discussion->getAttribute('tags');
 
         if ($tags->isEmpty()) {
             return false;

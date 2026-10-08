@@ -60,7 +60,7 @@ class ListingScreenshotsController implements RequestHandlerInterface
             throw new RouteNotFoundException();
         }
 
-        if (! $discussion->tags->contains(fn ($tag) => (bool) ($tag->is_classifieds ?? false))
+        if (! $discussion->getAttribute('tags')->contains(fn ($tag) => (bool) ($tag->is_classifieds ?? false))
             || ! $actor->can('editListing', $discussion)) {
             throw new PermissionDeniedException();
         }

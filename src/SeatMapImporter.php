@@ -9,7 +9,6 @@ namespace Flarum\Classifieds;
 use Flarum\Foundation\Paths;
 use GuzzleHttp\Client;
 use Psr\Http\Message\UploadedFileInterface;
-use Symfony\Component\Process\Exception\ExceptionInterface as ProcessException;
 use Symfony\Component\Process\Process;
 
 /**
@@ -324,7 +323,7 @@ class SeatMapImporter
 
         try {
             $process->run();
-        } catch (ProcessException|\Throwable $e) {
+        } catch (\Throwable $e) {
             @unlink($pdfPath);
 
             throw new SeatMapImportException('pdf_no_poppler');
