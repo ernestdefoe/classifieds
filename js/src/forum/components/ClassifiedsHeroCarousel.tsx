@@ -141,9 +141,9 @@ export default class ClassifiedsHeroCarousel extends Component<ClassifiedsHeroCa
 
         {images.length > 1 && (
           <div className="ClassifiedsHeroCarousel-thumbs">
-            {images.map((url, idx) => (
+            {images.map((thumb, idx) => (
               <button
-                key={url}
+                key={thumb.src}
                 type="button"
                 className={classList('ClassifiedsHeroCarousel-thumb', idx === i && 'is-active')}
                 onclick={(e: MouseEvent) => {
@@ -151,7 +151,7 @@ export default class ClassifiedsHeroCarousel extends Component<ClassifiedsHeroCa
                   this.index = idx;
                 }}
               >
-                <img src={url} alt="" loading="lazy" />
+                <img src={thumb.src} alt="" loading="lazy" />
               </button>
             ))}
           </div>
