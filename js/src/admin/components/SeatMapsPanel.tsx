@@ -156,12 +156,10 @@ export default class SeatMapsPanel extends Component<ComponentAttrs> {
   }
 
   load() {
-    app
-      .request<{ data: SeatMapSummary[] }>({ method: 'GET', url: this.endpoint() })
-      .then((result) => {
-        this.maps = result.data;
-        m.redraw();
-      });
+    app.request<{ data: SeatMapSummary[] }>({ method: 'GET', url: this.endpoint() }).then((result) => {
+      this.maps = result.data;
+      m.redraw();
+    });
   }
 
   add() {

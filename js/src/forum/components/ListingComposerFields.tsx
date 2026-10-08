@@ -55,9 +55,7 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
     const composer = this.attrs.composer;
     const listing = (composer.fields.listing = composer.fields.listing || {});
 
-    const labels = (
-      (app.forum.attribute<string>('classifiedsAllowedLabels') as string | undefined) || 'iso,wtb,wts,trade'
-    )
+    const labels = ((app.forum.attribute<string>('classifiedsAllowedLabels') as string | undefined) || 'iso,wtb,wts,trade')
       .split(',')
       .map((l: string) => l.trim())
       .filter(Boolean);
@@ -69,8 +67,7 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
 
     // If the listing has no currency yet, fall back to the admin-configured
     // default — never let "R$" or any symbol stay hardcoded.
-    const effectiveCurrency =
-      listing.currency || (app.forum.attribute<string>('classifiedsDefaultCurrency') as string | undefined) || '';
+    const effectiveCurrency = listing.currency || (app.forum.attribute<string>('classifiedsDefaultCurrency') as string | undefined) || '';
     const symbol = symbolFor(effectiveCurrency);
 
     listing.pendingImages = listing.pendingImages || [];
@@ -89,9 +86,11 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
           }}
         />
 
-        <div className="ClassifiedsComposer-pills" role="radiogroup" aria-label={
-          app.translator.trans('flarum-classifieds.forum.composer.label_label', {}, true) as string
-        }>
+        <div
+          className="ClassifiedsComposer-pills"
+          role="radiogroup"
+          aria-label={app.translator.trans('flarum-classifieds.forum.composer.label_label', {}, true) as string}
+        >
           {labels.map((l) => (
             <button
               key={l}
@@ -113,7 +112,9 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
             </button>
           ))}
           {requireLabel && !listing.label && (
-            <span className="ClassifiedsComposer-required" aria-hidden="true">*</span>
+            <span className="ClassifiedsComposer-required" aria-hidden="true">
+              *
+            </span>
           )}
         </div>
 
@@ -126,13 +127,7 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
               step="0.01"
               value={listing.price ?? ''}
               oninput={(e: InputEvent) => (listing.price = (e.target as HTMLInputElement).value)}
-              placeholder={
-                (app.translator.trans(
-                  'flarum-classifieds.forum.composer.price_label',
-                  {},
-                  true
-                ) as string) + (requirePrice ? ' *' : '')
-              }
+              placeholder={(app.translator.trans('flarum-classifieds.forum.composer.price_label', {}, true) as string) + (requirePrice ? ' *' : '')}
               aria-label={app.translator.trans('flarum-classifieds.forum.composer.price_label', {}, true) as string}
             />
           </div>
@@ -146,16 +141,8 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
                 step="0.01"
                 value={listing.priceMax ?? ''}
                 oninput={(e: InputEvent) => (listing.priceMax = (e.target as HTMLInputElement).value)}
-                placeholder={
-                  app.translator.trans(
-                    'flarum-classifieds.forum.composer.price_max_label',
-                    {},
-                    true
-                  ) as string
-                }
-                aria-label={
-                  app.translator.trans('flarum-classifieds.forum.composer.price_max_label', {}, true) as string
-                }
+                placeholder={app.translator.trans('flarum-classifieds.forum.composer.price_max_label', {}, true) as string}
+                aria-label={app.translator.trans('flarum-classifieds.forum.composer.price_max_label', {}, true) as string}
               />
             </div>
           )}
@@ -165,9 +152,7 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
             type="text"
             maxlength={8}
             value={listing.currency || ''}
-            oninput={(e: InputEvent) =>
-              (listing.currency = (e.target as HTMLInputElement).value.toUpperCase())
-            }
+            oninput={(e: InputEvent) => (listing.currency = (e.target as HTMLInputElement).value.toUpperCase())}
             placeholder={
               (app.forum.attribute<string>('classifiedsDefaultCurrency') as string | undefined) ||
               (app.translator.trans('flarum-classifieds.forum.composer.currency_label', {}, true) as string)
@@ -182,11 +167,7 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
             value={listing.location || ''}
             oninput={(e: InputEvent) => (listing.location = (e.target as HTMLInputElement).value)}
             placeholder={
-              (app.translator.trans(
-                'flarum-classifieds.forum.composer.location_placeholder',
-                {},
-                true
-              ) as string) + (requireLocation ? ' *' : '')
+              (app.translator.trans('flarum-classifieds.forum.composer.location_placeholder', {}, true) as string) + (requireLocation ? ' *' : '')
             }
             aria-label={app.translator.trans('flarum-classifieds.forum.composer.location_label', {}, true) as string}
           />

@@ -39,9 +39,7 @@ export default class ClassifiedsBreadcrumb extends Component<ClassifiedsBreadcru
               ) : (
                 <span className="ClassifiedsBreadcrumb-current">{c.label}</span>
               )}
-              {i < crumbs.length - 1 && (
-                <i className="fas fa-chevron-right ClassifiedsBreadcrumb-sep" aria-hidden="true" />
-              )}
+              {i < crumbs.length - 1 && <i className="fas fa-chevron-right ClassifiedsBreadcrumb-sep" aria-hidden="true" />}
             </li>
           ))}
         </ol>

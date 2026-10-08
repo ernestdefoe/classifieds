@@ -6,10 +6,7 @@ import app from 'flarum/forum/app';
  * Returns the public URL on success, or throws on failure (caller can decide
  * whether to swallow or surface the error in an alert).
  */
-export default async function uploadListingImage(
-  discussionId: number | string,
-  file: File
-): Promise<string> {
+export default async function uploadListingImage(discussionId: number | string, file: File): Promise<string> {
   const formData = new FormData();
   formData.append('file', file);
 
@@ -35,10 +32,7 @@ export default async function uploadListingImage(
   return url;
 }
 
-export async function deleteListingImage(
-  discussionId: number | string,
-  url: string
-): Promise<void> {
+export async function deleteListingImage(discussionId: number | string, url: string): Promise<void> {
   // Extract filename from full URL ("/assets/classifieds/foo.jpg" -> "foo.jpg")
   const filename = url.split('/').pop() || '';
   if (!filename) return;

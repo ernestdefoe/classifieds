@@ -44,11 +44,7 @@ export default function addListingHeroBadge(): void {
     const images = discussion.listingImages?.() || [];
     const label = discussion.listingLabel();
     const status = discussion.listingStatus() || 'active';
-    const price = formatPrice(
-      discussion.listingPrice(),
-      discussion.listingPriceMax(),
-      discussion.listingCurrency()
-    );
+    const price = formatPrice(discussion.listingPrice(), discussion.listingPriceMax(), discussion.listingCurrency());
     const location = discussion.listingLocation();
     const seatDisplay = discussion.listingSeatDisplay?.();
     const seatMap = (discussion as any).listingSeatMap?.();
@@ -58,9 +54,7 @@ export default function addListingHeroBadge(): void {
 
     // Pick the first classifieds tag's color (or any tag's color as fallback)
     // to tint the hero subtly. Falls back to the theme primary if no color.
-    const classifiedsTag = tags.find(
-      (t: any) => t && typeof t.isClassifieds === 'function' && t.isClassifieds()
-    );
+    const classifiedsTag = tags.find((t: any) => t && typeof t.isClassifieds === 'function' && t.isClassifieds());
     const tintTag = classifiedsTag || tags.find((t: any) => t && typeof t.color === 'function' && t.color());
     const tintColor: string = (tintTag && tintTag.color?.()) || '';
 
@@ -134,12 +128,7 @@ export default function addListingHeroBadge(): void {
                   )}
                   {status !== 'active' && (
                     <span className={`ClassifiedsHero-statusBadge ClassifiedsHero-statusBadge--${status}`}>
-                      <i
-                        className={
-                          'fas ' + (status === 'sold' ? 'fa-check-circle' : 'fa-flag-checkered')
-                        }
-                        aria-hidden="true"
-                      />{' '}
+                      <i className={'fas ' + (status === 'sold' ? 'fa-check-circle' : 'fa-flag-checkered')} aria-hidden="true" />{' '}
                       {app.translator.trans(`flarum-classifieds.lib.statuses.${status}`)}
                     </span>
                   )}
@@ -155,7 +144,6 @@ export default function addListingHeroBadge(): void {
                 <div className="ClassifiedsHero-seats">
                   <i className="fas fa-ticket" aria-hidden="true" />
                   <span>{seatDisplay}</span>
-
                 </div>
               )}
               {location && (

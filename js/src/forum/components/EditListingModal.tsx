@@ -37,9 +37,7 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
     this.price = Stream(discussion.listingPrice() != null ? String(discussion.listingPrice()) : '');
     this.priceMax = Stream(discussion.listingPriceMax() != null ? String(discussion.listingPriceMax()) : '');
     this.currency = Stream(
-      discussion.listingCurrency() ||
-        (app.forum.attribute<string>('classifiedsDefaultCurrency') as string | undefined) ||
-        'USD'
+      discussion.listingCurrency() || (app.forum.attribute<string>('classifiedsDefaultCurrency') as string | undefined) || 'USD'
     );
     this.location = Stream(discussion.listingLocation() || '');
     this.section = Stream(discussion.listingSection() || '');
@@ -57,9 +55,7 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
   }
 
   content(): Mithril.Children {
-    const labels = (
-      (app.forum.attribute<string>('classifiedsAllowedLabels') as string | undefined) || 'iso,wtb,wts,trade'
-    )
+    const labels = ((app.forum.attribute<string>('classifiedsAllowedLabels') as string | undefined) || 'iso,wtb,wts,trade')
       .split(',')
       .map((l: string) => l.trim())
       .filter(Boolean);
@@ -122,11 +118,7 @@ export default class EditListingModal extends FormModal<EditListingModalAttrs> {
               // Not bidi: bidi marks the selected option by walking the
               // select's children, and the mapped options arrive as one nested
               // array with no attrs, which threw and blanked the whole modal.
-              <select
-                className="FormControl"
-                value={this.seatmapId()}
-                onchange={(e: Event) => this.seatmapId((e.target as HTMLSelectElement).value)}
-              >
+              <select className="FormControl" value={this.seatmapId()} onchange={(e: Event) => this.seatmapId((e.target as HTMLSelectElement).value)}>
                 <option value="">{app.translator.trans('flarum-classifieds.forum.composer.seatmap_none')}</option>
                 {this.seatMaps().map((map: any) => (
                   <option value={String(map.id)} key={map.id}>

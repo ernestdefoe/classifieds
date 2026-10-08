@@ -25,10 +25,7 @@ export default function addListingControls(): void {
     if (discussion.canMarkListingSold()) {
       items.add(
         'markListingSold',
-        <Button
-          icon={isActive(discussion) ? 'fas fa-check-circle' : 'fas fa-undo'}
-          onclick={() => Controls.markListingSoldAction.call(discussion)}
-        >
+        <Button icon={isActive(discussion) ? 'fas fa-check-circle' : 'fas fa-undo'} onclick={() => Controls.markListingSoldAction.call(discussion)}>
           {app.translator.trans(
             isActive(discussion)
               ? 'flarum-classifieds.forum.discussion_controls.mark_sold_button'

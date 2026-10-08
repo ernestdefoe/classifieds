@@ -68,9 +68,7 @@ export default class SeatMapModal extends Modal<SeatMapModalAttrs> {
             of the two of them is broken.
           */}
           {!point && section && (
-            <span className="ClassifiedsSeatMap-untraced">
-              {app.translator.trans('flarum-classifieds.forum.seatmap.not_marked', { section })}
-            </span>
+            <span className="ClassifiedsSeatMap-untraced">{app.translator.trans('flarum-classifieds.forum.seatmap.not_marked', { section })}</span>
           )}
         </p>
       </div>

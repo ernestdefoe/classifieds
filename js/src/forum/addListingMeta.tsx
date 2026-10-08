@@ -29,13 +29,7 @@ export default function addListingMeta(): void {
     }
 
     if (discussion.listingLabel()) {
-      items.add(
-        'classifiedsLabel',
-        <span className={labelClass(discussion.listingLabel())}>
-          {labelText(discussion.listingLabel())}
-        </span>,
-        100
-      );
+      items.add('classifiedsLabel', <span className={labelClass(discussion.listingLabel())}>{labelText(discussion.listingLabel())}</span>, 100);
     }
   });
 }

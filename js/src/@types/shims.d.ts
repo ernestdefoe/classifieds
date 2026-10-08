@@ -2,7 +2,6 @@
 // replacing it.
 export {};
 
-
 declare module 'flarum/common/models/Discussion' {
   export default interface Discussion {
     isClassifieds(): boolean;

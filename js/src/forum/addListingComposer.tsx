@@ -48,9 +48,7 @@ function isClassifiedsContext(this_: any): boolean {
   const tags: TagWithClassifieds[] | undefined = this_?.composer?.fields?.tags;
   if (!tags || !tags.length) return false;
 
-  return tags.some(
-    (tag) => tag && typeof tag.isClassifieds === 'function' && tag.isClassifieds() === true
-  );
+  return tags.some((tag) => tag && typeof tag.isClassifieds === 'function' && tag.isClassifieds() === true);
 }
 
 function ensureListingState(composer: any): ListingFields {
@@ -92,20 +90,13 @@ export default function addListingComposer(): void {
 
     const Fields = listingFieldsComponent();
 
-    items.add(
-      'classifieds',
-      Fields ? <Fields composer={this.composer} /> : <LoadingIndicator display="inline" size="small" />,
-      -10
-    );
+    items.add('classifieds', Fields ? <Fields composer={this.composer} /> : <LoadingIndicator display="inline" size="small" />, -10);
   });
 
   // Add `listingLabel/Price/PriceMax/Currency/Location` to the JSON:API attrs
   // sent on save — only for classifieds discussions. Non-classifieds saves
   // never see any classifieds field.
-  override('flarum/forum/components/DiscussionComposer', 'data', function (
-    this: any,
-    original: () => Record<string, any>
-  ) {
+  override('flarum/forum/components/DiscussionComposer', 'data', function (this: any, original: () => Record<string, any>) {
     const data = original();
 
     if (!isClassifiedsContext(this)) return data;
@@ -125,10 +116,7 @@ export default function addListingComposer(): void {
     return data;
   });
 
-  override('flarum/forum/components/DiscussionComposer', 'onsubmit', function (
-    this: any,
-    original: () => unknown
-  ) {
+  override('flarum/forum/components/DiscussionComposer', 'onsubmit', function (this: any, original: () => unknown) {
     if (!isClassifiedsContext(this)) return original();
 
     const listing: ListingFields = this.composer.fields.listing || {};
@@ -137,26 +125,17 @@ export default function addListingComposer(): void {
     const requireLocation = !!app.forum.attribute('classifiedsRequireLocation');
 
     if (requireLabel && !listing.label) {
-      app.alerts.show(
-        { type: 'error' },
-        app.translator.trans('flarum-classifieds.forum.classifieds_composer.label_required')
-      );
+      app.alerts.show({ type: 'error' }, app.translator.trans('flarum-classifieds.forum.classifieds_composer.label_required'));
       return;
     }
 
     if (requirePrice && (listing.price === '' || listing.price == null)) {
-      app.alerts.show(
-        { type: 'error' },
-        app.translator.trans('flarum-classifieds.forum.classifieds_composer.price_required')
-      );
+      app.alerts.show({ type: 'error' }, app.translator.trans('flarum-classifieds.forum.classifieds_composer.price_required'));
       return;
     }
 
     if (requireLocation && !listing.location) {
-      app.alerts.show(
-        { type: 'error' },
-        app.translator.trans('flarum-classifieds.forum.classifieds_composer.location_required')
-      );
+      app.alerts.show({ type: 'error' }, app.translator.trans('flarum-classifieds.forum.classifieds_composer.location_required'));
       return;
     }
 

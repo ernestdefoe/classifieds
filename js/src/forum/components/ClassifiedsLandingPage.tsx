@@ -15,9 +15,7 @@ export default class ClassifiedsLandingPage extends Page {
     super.oninit(vnode);
 
     this.bodyClass = 'App--index ClassifiedsLandingPage-body';
-    app.setTitle(
-      extractText(app.translator.trans('flarum-classifieds.forum.landing.title')) as string
-    );
+    app.setTitle(extractText(app.translator.trans('flarum-classifieds.forum.landing.title')) as string);
 
     this.loadTags();
   }
@@ -28,8 +26,7 @@ export default class ClassifiedsLandingPage extends Page {
     app.store
       .find<Tag[]>('tags', { include: 'parent' })
       .then((tags) => {
-        this.classifiedsTags = (tags || [])
-          .filter((t) => t && typeof t.isClassifieds === 'function' && t.isClassifieds());
+        this.classifiedsTags = (tags || []).filter((t) => t && typeof t.isClassifieds === 'function' && t.isClassifieds());
         this.loading = false;
         m.redraw();
       })
@@ -51,21 +48,15 @@ export default class ClassifiedsLandingPage extends Page {
       <div className="ClassifiedsLanding">
         <header className="ClassifiedsLanding-header">
           <span className="ClassifiedsLanding-greeting">{greeting}</span>
-          <span className="ClassifiedsLanding-prompt">
-            {app.translator.trans('flarum-classifieds.forum.landing.prompt')}
-          </span>
+          <span className="ClassifiedsLanding-prompt">{app.translator.trans('flarum-classifieds.forum.landing.prompt')}</span>
         </header>
 
         {this.loading ? (
           <LoadingIndicator />
         ) : this.classifiedsTags.length === 0 ? (
-          <p className="ClassifiedsLanding-empty">
-            {app.translator.trans('flarum-classifieds.forum.landing.empty')}
-          </p>
+          <p className="ClassifiedsLanding-empty">{app.translator.trans('flarum-classifieds.forum.landing.empty')}</p>
         ) : (
-          <div className="ClassifiedsLanding-grid">
-            {this.classifiedsTags.map((tag, idx) => this.renderCategoryCard(tag, idx))}
-          </div>
+          <div className="ClassifiedsLanding-grid">{this.classifiedsTags.map((tag, idx) => this.renderCategoryCard(tag, idx))}</div>
         )}
       </div>
     );
@@ -80,10 +71,7 @@ export default class ClassifiedsLandingPage extends Page {
     return (
       <a
         key={String(tag.id())}
-        className={classList(
-          'ClassifiedsLanding-card',
-          `ClassifiedsLanding-card--${idx}`
-        )}
+        className={classList('ClassifiedsLanding-card', `ClassifiedsLanding-card--${idx}`)}
         style={{ '--tag-color': color } as any}
         href={app.route('tag', { tags: slug })}
         config={m.route.link as any}

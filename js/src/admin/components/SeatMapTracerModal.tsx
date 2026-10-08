@@ -76,9 +76,7 @@ export default class SeatMapTracerModal extends Modal<SeatMapTracerAttrs> {
               if (e.key === 'Enter') e.preventDefault();
             }}
           />
-          <span className="ClassifiedsTracer-count">
-            {app.translator.trans('flarum-classifieds.admin.seatmaps.traced', { count: names.length })}
-          </span>
+          <span className="ClassifiedsTracer-count">{app.translator.trans('flarum-classifieds.admin.seatmaps.traced', { count: names.length })}</span>
         </div>
 
         {/*
@@ -92,30 +90,30 @@ export default class SeatMapTracerModal extends Modal<SeatMapTracerAttrs> {
         */}
         <div className="ClassifiedsTracer-canvas">
           <div className="ClassifiedsTracer-stage" onclick={(e: MouseEvent) => this.place(e)}>
-          <img
-            className="ClassifiedsTracer-image"
-            src={this.attrs.map.image || ''}
-            alt={this.attrs.map.title}
-            oncreate={(vnode: Mithril.VnodeDOM) => (this.image = vnode.dom as HTMLImageElement)}
-            onupdate={(vnode: Mithril.VnodeDOM) => (this.image = vnode.dom as HTMLImageElement)}
-          />
+            <img
+              className="ClassifiedsTracer-image"
+              src={this.attrs.map.image || ''}
+              alt={this.attrs.map.title}
+              oncreate={(vnode: Mithril.VnodeDOM) => (this.image = vnode.dom as HTMLImageElement)}
+              onupdate={(vnode: Mithril.VnodeDOM) => (this.image = vnode.dom as HTMLImageElement)}
+            />
 
-          <div className="ClassifiedsTracer-markers" aria-hidden="true">
-            {names.map((name) => (
-              <button
-                type="button"
-                className="ClassifiedsTracer-marker"
-                key={name}
-                style={{ left: this.sections[name].x * 100 + '%', top: this.sections[name].y * 100 + '%' }}
-                title={app.translator.trans('flarum-classifieds.admin.seatmaps.remove', { section: name }, true) as string}
-                onclick={(e: MouseEvent) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  delete this.sections[name];
-                }}
-              >
-                {name}
-              </button>
+            <div className="ClassifiedsTracer-markers" aria-hidden="true">
+              {names.map((name) => (
+                <button
+                  type="button"
+                  className="ClassifiedsTracer-marker"
+                  key={name}
+                  style={{ left: this.sections[name].x * 100 + '%', top: this.sections[name].y * 100 + '%' }}
+                  title={app.translator.trans('flarum-classifieds.admin.seatmaps.remove', { section: name }, true) as string}
+                  onclick={(e: MouseEvent) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    delete this.sections[name];
+                  }}
+                >
+                  {name}
+                </button>
               ))}
             </div>
           </div>

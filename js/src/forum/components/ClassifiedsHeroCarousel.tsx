@@ -55,10 +55,7 @@ export default class ClassifiedsHeroCarousel extends Component<ClassifiedsHeroCa
              * chart's aspect ratio makes a percentage of it a percentage of the
              * picture again, at every size, with nothing to recompute on resize.
              */
-            <div
-              className="ClassifiedsHeroCarousel-mapWrap"
-              style={{ aspectRatio: `${slide.map.width} / ${slide.map.height}` }}
-            >
+            <div className="ClassifiedsHeroCarousel-mapWrap" style={{ aspectRatio: `${slide.map.width} / ${slide.map.height}` }}>
               <img src={slide.src} alt={slide.map.title} loading="lazy" decoding="async" />
 
               {slide.map.point && (

@@ -23,17 +23,10 @@ export default class ClassifiedsListingCard extends Component<ClassifiedsListing
     const href = app.route.discussion(d as any);
 
     return (
-      <section
-        className={`olx-adcard olx-adcard__horizontal ClassifiedsListingCard ClassifiedsListingCard--${status}`}
-        data-mode="horizontal"
-      >
+      <section className={`olx-adcard olx-adcard__horizontal ClassifiedsListingCard ClassifiedsListingCard--${status}`} data-mode="horizontal">
         <div className="olx-adcard__content" data-mode="horizontal">
           <div className="olx-adcard__topbody" data-mode="horizontal">
-            <m.route.Link
-              className="olx-adcard__link"
-              href={href}
-              title={d.title()}
-            >
+            <m.route.Link className="olx-adcard__link" href={href} title={d.title()}>
               <h2 className="olx-adcard__title">{d.title()}</h2>
             </m.route.Link>
 
@@ -49,28 +42,20 @@ export default class ClassifiedsListingCard extends Component<ClassifiedsListing
                 <div
                   className={`olx-core-badge olx-core-badge--medium olx-core-badge--pill ClassifiedsListingCard-statusBadge ClassifiedsListingCard-statusBadge--${status}`}
                 >
-                  <i
-                    className={
-                      'fas ' + (status === 'sold' ? 'fa-check-circle' : 'fa-flag-checkered')
-                    }
-                    aria-hidden="true"
-                  />{' '}
+                  <i className={'fas ' + (status === 'sold' ? 'fa-check-circle' : 'fa-flag-checkered')} aria-hidden="true" />{' '}
                   {app.translator.trans(`flarum-classifieds.lib.statuses.${status}`)}
                 </div>
               )}
             </div>
           </div>
 
-          <div className="olx-adcard__mediumbody">
-            {price && <h3 className="olx-adcard__price">{price}</h3>}
-          </div>
+          <div className="olx-adcard__mediumbody">{price && <h3 className="olx-adcard__price">{price}</h3>}</div>
 
           <div className="olx-adcard__bottombody">
             <div className="olx-adcard__location-date">
               {d.listingLocation() && (
                 <p className="olx-adcard__location">
-                  <i className="fas fa-map-marker-alt" aria-hidden="true" />{' '}
-                  {d.listingLocation()}
+                  <i className="fas fa-map-marker-alt" aria-hidden="true" /> {d.listingLocation()}
                 </p>
               )}
               {date && <p className="olx-adcard__date">{humanTime(date)}</p>}

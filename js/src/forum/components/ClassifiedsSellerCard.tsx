@@ -21,17 +21,13 @@ export default class ClassifiedsSellerCard extends Component<ClassifiedsSellerCa
     const joined = user.joinTime?.();
     // Only listings in classifieds tags — not the user's total forum
     // discussion count (which would include unrelated topics).
-    const listingsCount = typeof user.classifiedsListingsCount === 'function'
-      ? user.classifiedsListingsCount()
-      : null;
+    const listingsCount = typeof user.classifiedsListingsCount === 'function' ? user.classifiedsListingsCount() : null;
     const lastSeen = user.lastSeenAt?.();
 
     return (
       <div className="ClassifiedsSellerCard">
         <div className="ClassifiedsSellerCard-header">
-          <span className="ClassifiedsSellerCard-label">
-            {app.translator.trans('flarum-classifieds.forum.seller.title')}
-          </span>
+          <span className="ClassifiedsSellerCard-label">{app.translator.trans('flarum-classifieds.forum.seller.title')}</span>
         </div>
 
         <a className="ClassifiedsSellerCard-body" href={profileHref} config={(m as any).route.link}>

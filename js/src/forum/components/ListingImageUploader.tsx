@@ -84,12 +84,8 @@ export default class ListingImageUploader extends Component<ListingImageUploader
           {total === 0 ? (
             <div className="ListingImageUploader-prompt">
               <i className="fas fa-camera" aria-hidden="true" />
-              <span className="ListingImageUploader-promptTitle">
-                {app.translator.trans('flarum-classifieds.forum.uploader.title')}
-              </span>
-              <span className="ListingImageUploader-promptHint">
-                {app.translator.trans('flarum-classifieds.forum.uploader.hint', { max })}
-              </span>
+              <span className="ListingImageUploader-promptTitle">{app.translator.trans('flarum-classifieds.forum.uploader.title')}</span>
+              <span className="ListingImageUploader-promptHint">{app.translator.trans('flarum-classifieds.forum.uploader.hint', { max })}</span>
             </div>
           ) : (
             <div className="ListingImageUploader-grid">
@@ -112,11 +108,7 @@ export default class ListingImageUploader extends Component<ListingImageUploader
 
               {this.attrs.pending.map((p, i) => (
                 <div
-                  className={classList(
-                    'ListingImageUploader-thumb',
-                    'ListingImageUploader-thumb--pending',
-                    p.uploaded && 'is-uploaded'
-                  )}
+                  className={classList('ListingImageUploader-thumb', 'ListingImageUploader-thumb--pending', p.uploaded && 'is-uploaded')}
                   key={p.previewUrl}
                 >
                   <img src={p.previewUrl} alt="" />
@@ -155,9 +147,7 @@ export default class ListingImageUploader extends Component<ListingImageUploader
                   }}
                   aria-label={app.translator.trans('flarum-classifieds.forum.uploader.add') as string}
                 >
-                  <span className="ListingImageUploader-addLabel">
-                    {app.translator.trans('flarum-classifieds.forum.uploader.add')}
-                  </span>
+                  <span className="ListingImageUploader-addLabel">{app.translator.trans('flarum-classifieds.forum.uploader.add')}</span>
                 </Button>
               )}
             </div>

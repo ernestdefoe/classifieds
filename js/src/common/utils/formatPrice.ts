@@ -58,12 +58,7 @@ export default function formatPrice(
 
   const min = symbol + formatNumber(price);
 
-  if (
-    priceMax !== null &&
-    priceMax !== undefined &&
-    priceMax !== '' &&
-    parseFloat(String(priceMax)) > parseFloat(String(price))
-  ) {
+  if (priceMax !== null && priceMax !== undefined && priceMax !== '' && parseFloat(String(priceMax)) > parseFloat(String(price))) {
     return min + ' – ' + symbol + formatNumber(priceMax);
   }
 

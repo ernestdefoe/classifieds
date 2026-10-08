@@ -19,11 +19,7 @@ export default class ClassifiedsActions extends Component<ClassifiedsActionsAttr
     return (
       <div className="ClassifiedsActions">
         {!isMyListing && me && (
-          <Button
-            className="Button Button--primary ClassifiedsActions-primary"
-            icon="fas fa-comments"
-            onclick={() => this.contactSeller()}
-          >
+          <Button className="Button Button--primary ClassifiedsActions-primary" icon="fas fa-comments" onclick={() => this.contactSeller()}>
             {app.translator.trans('flarum-classifieds.forum.actions.contact_seller')}
           </Button>
         )}
@@ -70,7 +66,6 @@ export default class ClassifiedsActions extends Component<ClassifiedsActionsAttr
           >
             <i className="icon fas fa-link" aria-hidden="true" />
           </button>
-
         </div>
       </div>
     );
@@ -83,8 +78,7 @@ export default class ClassifiedsActions extends Component<ClassifiedsActionsAttr
 
     // If flarum/messages is enabled, open the message composer; otherwise jump
     // to the seller's profile so the user can DM/follow them via core flows.
-    const messagesEnabled = !!(app as any).extensionData?.['flarum-messages']
-      || !!(app.forum as any).attribute?.('messagesEnabled');
+    const messagesEnabled = !!(app as any).extensionData?.['flarum-messages'] || !!(app.forum as any).attribute?.('messagesEnabled');
 
     if (messagesEnabled && (app as any).composer?.load) {
       (flarum as any).reg
@@ -127,16 +121,10 @@ export default class ClassifiedsActions extends Component<ClassifiedsActionsAttr
     navigator.clipboard
       ?.writeText(url)
       .then(() => {
-        app.alerts.show(
-          { type: 'success' },
-          app.translator.trans('flarum-classifieds.forum.actions.link_copied')
-        );
+        app.alerts.show({ type: 'success' }, app.translator.trans('flarum-classifieds.forum.actions.link_copied'));
       })
       .catch(() => {
-        app.alerts.show(
-          { type: 'error' },
-          app.translator.trans('flarum-classifieds.forum.actions.copy_failed')
-        );
+        app.alerts.show({ type: 'error' }, app.translator.trans('flarum-classifieds.forum.actions.copy_failed'));
       });
   }
 }
