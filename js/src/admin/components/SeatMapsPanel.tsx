@@ -59,7 +59,7 @@ export default class SeatMapsPanel extends Component<ComponentAttrs> {
             type="text"
             maxlength={100}
             value={this.title}
-            placeholder={this.t('name_placeholder', true) as string}
+            placeholder={this.t('name_placeholder', true)}
             oninput={(e: InputEvent) => (this.title = (e.target as HTMLInputElement).value)}
           />
 
@@ -142,8 +142,13 @@ export default class SeatMapsPanel extends Component<ComponentAttrs> {
     );
   }
 
+  /** A message as children, or with raw, as plain text for attributes and errors. */
+  t(key: string): any[];
+  t(key: string, raw: true): string;
   t(key: string, raw = false) {
-    return app.translator.trans(`flarum-classifieds.admin.seatmaps.${key}`, {}, raw as any);
+    const id = `flarum-classifieds.admin.seatmaps.${key}`;
+
+    return raw ? app.translator.trans(id, {}, true) : app.translator.trans(id, {});
   }
 
   endpoint(suffix = '') {
@@ -165,12 +170,12 @@ export default class SeatMapsPanel extends Component<ComponentAttrs> {
     this.error = null;
 
     if (!this.title.trim()) {
-      this.error = this.t('needs_title', true) as string;
+      this.error = this.t('needs_title', true);
       return;
     }
 
     if (!this.file && !this.url.trim()) {
-      this.error = this.t('needs_image', true) as string;
+      this.error = this.t('needs_image', true);
       return;
     }
 

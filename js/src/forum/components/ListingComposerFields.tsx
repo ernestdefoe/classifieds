@@ -81,10 +81,10 @@ export default class ListingComposerFields extends Component<ListingComposerFiel
         <ListingImageUploader
           pending={listing.pendingImages}
           uploaded={listing.uploadedImages}
-          onChangePending={(next) => {
+          onChangePending={(next: PendingImage[]) => {
             listing.pendingImages = next;
           }}
-          onRemoveUploaded={(url) => {
+          onRemoveUploaded={(url: string) => {
             listing.uploadedImages = (listing.uploadedImages || []).filter((u) => u !== url);
           }}
         />

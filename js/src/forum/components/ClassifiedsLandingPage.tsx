@@ -1,4 +1,5 @@
 import app from 'flarum/forum/app';
+import type Tag from 'ext:flarum/tags/common/models/Tag';
 import Page from 'flarum/common/components/Page';
 import IndexPage from 'flarum/forum/components/IndexPage';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
@@ -6,20 +7,9 @@ import classList from 'flarum/common/utils/classList';
 import extractText from 'flarum/common/utils/extractText';
 import type Mithril from 'mithril';
 
-interface TagLike {
-  id: () => string | number;
-  name: () => string;
-  slug: () => string;
-  description: () => string | null;
-  color: () => string | null;
-  icon: () => string | null;
-  isClassifieds?: () => boolean;
-  discussionCount?: () => number;
-}
-
 export default class ClassifiedsLandingPage extends Page {
   loading = true;
-  classifiedsTags: TagLike[] = [];
+  classifiedsTags: Tag[] = [];
 
   oninit(vnode: Mithril.Vnode) {
     super.oninit(vnode);
@@ -36,10 +26,10 @@ export default class ClassifiedsLandingPage extends Page {
     this.loading = true;
 
     app.store
-      .find('tags', { include: 'parent' })
-      .then((tags: any[]) => {
+      .find<Tag[]>('tags', { include: 'parent' })
+      .then((tags) => {
         this.classifiedsTags = (tags || [])
-          .filter((t: any) => t && typeof t.isClassifieds === 'function' && t.isClassifieds());
+          .filter((t) => t && typeof t.isClassifieds === 'function' && t.isClassifieds());
         this.loading = false;
         m.redraw();
       })
@@ -81,7 +71,7 @@ export default class ClassifiedsLandingPage extends Page {
     );
   }
 
-  renderCategoryCard(tag: TagLike, idx: number): Mithril.Children {
+  renderCategoryCard(tag: Tag, idx: number): Mithril.Children {
     const color = tag.color() || 'var(--primary-color)';
     const icon = tag.icon() || 'fas fa-tag';
     const slug = tag.slug();

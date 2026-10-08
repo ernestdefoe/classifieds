@@ -1,3 +1,8 @@
+// A module file, so each block below augments the core typing instead of
+// replacing it.
+export {};
+
+
 declare module 'flarum/common/models/Discussion' {
   export default interface Discussion {
     isClassifieds(): boolean;
@@ -13,6 +18,7 @@ declare module 'flarum/common/models/Discussion' {
     listingSection(): string | null;
     listingRow(): string | null;
     listingSeats(): string | null;
+    listingSeatmapId(): number | null;
     listingSeatDisplay(): string | null;
     listingSoldAt(): Date | null;
     listingBumpedAt(): Date | null;
