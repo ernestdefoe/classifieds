@@ -19,7 +19,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * GET    /api/classifieds/seatmaps/{id}   → the chart WITH its traced sections
  * PATCH  /api/classifieds/seatmaps/{id}   → save the tracing (and the title)
- * DELETE /api/classifieds/seatmaps/{id}   → remove it
+ * DELETE /api/classifieds/seatmaps/{id}   → remove it.
  */
 class SeatMapController implements RequestHandlerInterface
 {

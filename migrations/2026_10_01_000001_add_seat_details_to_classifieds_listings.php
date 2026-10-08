@@ -1,7 +1,6 @@
 <?php
 
 use Flarum\Database\Migration;
-use Illuminate\Database\Schema\Blueprint;
 
 /**
  * Section, row and seats on a listing.

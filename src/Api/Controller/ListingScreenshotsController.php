@@ -20,7 +20,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * POST   /api/classifieds/listings/{id}/screenshots   body: file (multipart) → adiciona uma screenshot
- * DELETE /api/classifieds/listings/{id}/screenshots   body: filename            → remove a screenshot
+ * DELETE /api/classifieds/listings/{id}/screenshots   body: filename            → remove a screenshot.
  *
  * Múltiplas imagens guardadas em `classifieds_listings.screenshots`
  * (JSON array de filenames). Validação MIME real via finfo, anti

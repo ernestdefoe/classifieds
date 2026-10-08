@@ -24,7 +24,9 @@ use Flarum\Classifieds\SeatMap;
 $src = '/tmp/evenue';
 $manifest = json_decode(file_get_contents("$src/manifest.json"), true);
 $dir = '/var/www/html/public/assets/classifieds';
-if (! is_dir($dir)) { mkdir($dir, 0775, true); }
+if (! is_dir($dir)) {
+    mkdir($dir, 0775, true);
+}
 
 $backup = [];
 $created = $filled = $replaced = $kept = 0;
@@ -39,7 +41,10 @@ foreach ($manifest as $m) {
 
     // An untraced picture is worth adding where we have nothing at all -- a
     // buyer can still see the ground -- but it can never displace a chart.
-    if (! $n && $map) { $kept++; continue; }
+    if (! $n && $map) {
+        $kept++;
+        continue;
+    }
 
     if ($had > 0) {
         // Only worth swapping a working chart for a decisively better one.
@@ -90,7 +95,9 @@ if ($backup) {
 }
 
 sort($notes);
-foreach ($notes as $line) { echo "  $line\n"; }
+foreach ($notes as $line) {
+    echo "  $line\n";
+}
 
 echo "\ncreated $created, filled $filled, replaced $replaced, kept $kept (+$gained sections)\n";
 

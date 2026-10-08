@@ -10,7 +10,6 @@ use Flarum\Foundation\AbstractValidator;
 use Flarum\Locale\TranslatorInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Validation\Factory;
-use Illuminate\Validation\Validator;
 
 class ListingValidator extends AbstractValidator
 {

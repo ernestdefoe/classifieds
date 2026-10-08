@@ -18,7 +18,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * GET  /api/classifieds/seatmaps   → every chart, with its section count
- * POST /api/classifieds/seatmaps   → add one, from an upload or from a URL
+ * POST /api/classifieds/seatmaps   → add one, from an upload or from a URL.
  *
  * Administrators only. Charts are forum-wide furniture, not something a seller
  * creates while writing an advert.
