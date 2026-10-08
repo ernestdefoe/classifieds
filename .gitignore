@@ -20,3 +20,5 @@ AGENT.md
 
 # Regenerated from live coverage each run
 tools/seatmaps/targets.txt
+.phpunit.result.cache
+/tests/integration/tmp
