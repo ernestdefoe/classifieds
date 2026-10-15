@@ -77,6 +77,11 @@ flarum-classifieds:
 
     breadcrumb:
       classifieds: Classificados
+      label: Trilha de navegação
+
+    carousel:
+      previous: Anterior
+      next: Próximo
 
     actions:
       contact_seller: Falar com o vendedor

@@ -146,6 +146,11 @@ flarum-classifieds:
 
     breadcrumb:
       classifieds: Classifieds
+      label: Breadcrumb
+
+    carousel:
+      previous: Previous
+      next: Next
 
     actions:
       contact_seller: Message seller

@@ -1,3 +1,4 @@
+import app from 'flarum/common/app';
 import Component, { ComponentAttrs } from 'flarum/common/Component';
 import classList from 'flarum/common/utils/classList';
 import type Mithril from 'mithril';
@@ -101,7 +102,7 @@ export default class ClassifiedsHeroCarousel extends Component<ClassifiedsHeroCa
                   e.preventDefault();
                   this.index = (i - 1 + images.length) % images.length;
                 }}
-                aria-label="Previous"
+                aria-label={app.translator.trans('flarum-classifieds.forum.carousel.previous') as string}
               >
                 <i className="fas fa-chevron-left" aria-hidden="true" />
               </button>
@@ -112,7 +113,7 @@ export default class ClassifiedsHeroCarousel extends Component<ClassifiedsHeroCa
                   e.preventDefault();
                   this.index = (i + 1) % images.length;
                 }}
-                aria-label="Next"
+                aria-label={app.translator.trans('flarum-classifieds.forum.carousel.next') as string}
               >
                 <i className="fas fa-chevron-right" aria-hidden="true" />
               </button>

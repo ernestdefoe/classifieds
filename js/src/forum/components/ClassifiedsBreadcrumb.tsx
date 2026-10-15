@@ -28,7 +28,7 @@ export default class ClassifiedsBreadcrumb extends Component<ClassifiedsBreadcru
     if (crumbs.length === 0) return null;
 
     return (
-      <nav className="ClassifiedsBreadcrumb" aria-label="Breadcrumb">
+      <nav className="ClassifiedsBreadcrumb" aria-label={app.translator.trans('flarum-classifieds.forum.breadcrumb.label') as string}>
         <ol className="ClassifiedsBreadcrumb-list">
           {crumbs.map((c, i) => (
             <li key={i} className="ClassifiedsBreadcrumb-item">
