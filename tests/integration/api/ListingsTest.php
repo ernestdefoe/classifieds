@@ -135,6 +135,18 @@ class ListingsTest extends TestCase
     }
 
     #[Test]
+    public function a_seller_needs_the_permission_to_mark_their_listing_sold()
+    {
+        $this->database()->table('group_permission')->where('permission', 'discussion.markListingSold')->delete();
+
+        $this->assertFalse($this->json('GET', '/api/discussions/1', self::SELLER)[1]['data']['attributes']['canMarkListingSold']);
+
+        $this->patch(1, self::SELLER, ['listingStatus' => 'sold']);
+        $this->assertSame('active', $this->listing()->status);
+        $this->assertTrue($this->json('GET', '/api/discussions/1', 1)[1]['data']['attributes']['canMarkListingSold'], 'Staff still can');
+    }
+
+    #[Test]
     public function invalid_details_are_refused()
     {
         $this->assertSame(422, $this->patch(1, self::SELLER, ['listingStatus' => 'stolen'])[0]);

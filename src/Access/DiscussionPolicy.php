@@ -24,14 +24,14 @@ class DiscussionPolicy extends AbstractPolicy
             return null;
         }
 
-        if ($actor->id && $actor->id === $discussion->user_id) {
+        // The `discussion.markListingSold` permission (granted to Members by
+        // default) means "mark your OWN listing", like bump and edit; through
+        // core's catch-all it used to let any member mark ANY seller's listing.
+        if ($actor->id && $actor->id === $discussion->user_id && $actor->hasPermission('discussion.markListingSold')) {
             return $this->allow();
         }
 
         // Staff who may edit other people's discussions can mark any listing.
-        // The `discussion.markListingSold` permission (granted to Members by
-        // default) means "mark your OWN listing"; through core's catch-all it
-        // used to let any member mark ANY seller's listing sold.
         if ($actor->can('edit', $discussion)) {
             return $this->allow();
         }
