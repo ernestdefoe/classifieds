@@ -150,7 +150,7 @@ export default function addListingComposer(): void {
 
     const data = this.data();
 
-    app.store
+    return app.store
       .createRecord('discussions')
       .save(data)
       .then(async (discussion: any) => {
