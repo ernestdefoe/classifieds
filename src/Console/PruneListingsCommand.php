@@ -10,13 +10,15 @@ use Carbon\Carbon;
 use Flarum\Classifieds\Listing;
 use Flarum\Console\AbstractCommand;
 use Flarum\Discussion\Discussion;
+use Flarum\Foundation\Paths;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 class PruneListingsCommand extends AbstractCommand
 {
     public function __construct(
-        protected SettingsRepositoryInterface $settings
+        protected SettingsRepositoryInterface $settings,
+        protected Paths $paths
     ) {
         parent::__construct();
     }
@@ -53,7 +55,11 @@ class PruneListingsCommand extends AbstractCommand
 
             if ($threshold) {
                 $q->orWhere(function ($q2) use ($threshold, $includeActive) {
-                    $q2->whereNotNull('bumped_at')->where('bumped_at', '<', $threshold);
+                    // Age runs from the last bump, or from when the listing was
+                    // posted if it was never bumped (it used to be skipped).
+                    $q2->where(fn ($age) => $age
+                        ->where('bumped_at', '<', $threshold)
+                        ->orWhere(fn ($never) => $never->whereNull('bumped_at')->where('created_at', '<', $threshold)));
 
                     if (! $includeActive) {
                         $q2->whereIn('status', [Listing::STATUS_SOLD, Listing::STATUS_COMPLETED]);
@@ -78,11 +84,24 @@ class PruneListingsCommand extends AbstractCommand
             return 0;
         }
 
-        $discussionIds = $query->pluck('discussion_id')->all();
+        $pruned = 0;
+        $dir = $this->paths->public.'/assets/classifieds/';
 
-        Discussion::query()->whereIn('id', $discussionIds)->delete();
+        $query->select(['discussion_id', 'screenshots'])->chunkById(500, function ($listings) use (&$pruned, $dir) {
+            // The discussion goes for good (its listing row cascades), so the
+            // photos the extension stored for it would otherwise be orphaned.
+            foreach ($listings as $listing) {
+                foreach ((array) $listing->screenshots as $filename) {
+                    if (is_string($filename) && $filename !== '' && basename($filename) === $filename) {
+                        @unlink($dir.$filename);
+                    }
+                }
+            }
 
-        $this->info('Pruned '.count($discussionIds).' classifieds discussion(s).');
+            $pruned += Discussion::query()->whereIn('id', $listings->pluck('discussion_id'))->delete();
+        }, 'discussion_id');
+
+        $this->info("Pruned $pruned classifieds discussion(s).");
 
         return 0;
     }
