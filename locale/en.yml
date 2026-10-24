@@ -25,10 +25,17 @@ flarum-classifieds:
       require_location_label: Require a location
       bump_cooldown_hours_label: Hours between bumps
       bump_cooldown_hours_help: How long a seller waits before bumping the same listing again. 0 removes the limit.
-      auto_prune_days_label: Auto-prune after N days
-      auto_prune_days_help: Delete listings older than this many days. 0 disables.
-      auto_prune_sold_label: Auto-prune sold listings
-      auto_prune_sold_help: When pruning runs, also remove sold/completed listings.
+      auto_prune_days_label: Auto-prune sold listings after N days
+      auto_prune_days_help: >
+        Once a day, PERMANENTLY deletes the discussion of every sold or completed
+        listing last bumped (or, if never bumped, posted) more than this many days
+        ago, with all of its replies and photos. This cannot be undone. Active
+        listings are never pruned. 0 turns this off.
+      auto_prune_sold_label: Auto-prune every sold listing
+      auto_prune_sold_help: >
+        Once a day, PERMANENTLY deletes the discussion of every sold or completed
+        listing, however recent, with all of its replies and photos. This cannot
+        be undone. Active listings are never pruned.
 
     seatmaps:
       title: Stadium seating charts
@@ -75,7 +82,7 @@ flarum-classifieds:
         bad_payload: The sections could not be read.
 
     permissions:
-      mark_listing_sold_label: Mark listings as sold/active
+      mark_listing_sold_label: Mark own listings as sold/active
       bump_listing_label: Bump own listing
       edit_listing_label: Edit own listing fields
 

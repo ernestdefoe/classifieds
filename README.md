@@ -43,7 +43,7 @@
 ### Admin
 - **Per-tag opt-in** — Pick which tags act as classifieds tags via the native flarum-tags select-tags widget
 - **Default currency code** — One source of truth for currency symbol; per-listing override available
-- **Auto-prune** — Scheduled command removes sold/inactive listings after N days; configurable
+- **Auto-prune** — A daily scheduled command that permanently deletes the discussions of sold/completed listings (see [Auto-prune](#auto-prune)); off by default
 - **Permissions** — `discussion.markListingSold`, `discussion.bumpListing`, `discussion.editListing`
 
 ### Composer
@@ -87,8 +87,21 @@ All settings are available in the admin panel under the Classifieds extension:
 | Require a listing label | Make label selection mandatory | `true` |
 | Require a price | Make price field mandatory | `true` |
 | Require a location | Make location field mandatory | `false` |
-| Auto-prune after N days | Delete listings older than N days; `0` disables | `0` |
-| Auto-prune sold listings | When pruning runs, also remove sold/completed listings | `false` |
+| Auto-prune sold listings after N days | Daily, permanently delete sold/completed listings last bumped (or, if never bumped, posted) more than N days ago; `0` disables | `0` |
+| Auto-prune every sold listing | Daily, permanently delete every sold/completed listing, however recent | `false` |
+
+### Auto-prune
+
+🚨 **Pruning permanently deletes members' content.** A pruned listing's whole
+discussion goes — every reply in it — along with the photos uploaded to it.
+There is no trash and no undo.
+
+The scheduled run (daily, via Flarum's scheduler) only ever removes **sold** or
+**completed** listings. With *after N days* set, a listing goes once its last
+bump — or, if it was never bumped, the day it was posted — is more than N days
+old. With *every sold listing* on, every sold or completed listing goes on the
+next run, whatever its age. Active listings are never pruned automatically; only
+the `--include-active` console option below does that.
 
 ## Permissions
 
@@ -97,6 +110,10 @@ All settings are available in the admin panel under the Classifieds extension:
 | `discussion.markListingSold` | Member | Mark own listings as sold/active/completed |
 | `discussion.bumpListing` | Member | Bump (re-promote) own listing |
 | `discussion.editListing` | Member | Edit own listing fields after creation |
+
+Each permission covers the member's **own** listings only: a seller without it
+cannot do that to their own listing either. Anyone who may edit other people's
+discussions (moderators, admins) can mark and edit any listing.
 
 ## API Endpoints
 
@@ -114,7 +131,7 @@ The `Tag` resource is extended with `isClassifieds`.
 ## Console
 
 ```sh
-# Prune sold/expired listings according to admin settings
+# Permanently delete sold/completed listings according to admin settings
 php flarum classifieds:prune
 
 # Override the retention window for this run only
@@ -123,7 +140,7 @@ php flarum classifieds:prune --days=30
 # See what would be deleted without committing
 php flarum classifieds:prune --days=30 --dry-run
 
-# Also remove listings that are still active beyond the window
+# Also delete listings that are still active beyond the window (console only)
 php flarum classifieds:prune --days=30 --include-active
 ```
 
