@@ -38,7 +38,7 @@ class PruneListingsTest extends ConsoleTestCase
             $discussions[] = ['id' => $id, 'title' => "Listing $id", 'created_at' => $created, 'last_posted_at' => $created, 'user_id' => 2, 'first_post_id' => $id, 'comment_count' => 1];
             $posts[] = ['id' => $id, 'discussion_id' => $id, 'number' => 1, 'user_id' => 2, 'type' => 'comment', 'content' => '<t><p>x</p></t>', 'created_at' => $created];
             $tags[] = ['discussion_id' => $id, 'tag_id' => 7];
-            $listings[] = ['discussion_id' => $id, 'status' => $status, 'bumped_at' => $bumped, 'screenshots' => json_encode(["listing_{$id}_abc.jpg"]), 'created_at' => $created, 'updated_at' => $created];
+            $listings[] = ['discussion_id' => $id, 'status' => $status, 'bumped_at' => $bumped, 'created_at' => $created, 'updated_at' => $created];
         }
 
         $this->prepareDatabase([
@@ -49,6 +49,23 @@ class PruneListingsTest extends ConsoleTestCase
             'discussion_tag' => $tags,
             'classifieds_listings' => $listings,
         ]);
+
+    }
+
+    /**
+     * prepareDatabase() matches existing rows with "=" on every column, which
+     * PostgreSQL can't do on a json column, so the photos are set here, once
+     * the test's settings are in and the app has booted.
+     */
+    private function prune(array $input): void
+    {
+        $this->app();
+        foreach ([1, 2, 3, 4] as $id) {
+            $this->database()->table('classifieds_listings')->where('discussion_id', $id)
+                ->update(['screenshots' => json_encode(["listing_{$id}_abc.jpg"])]);
+        }
+
+        $this->runCommand($input);
     }
 
     private function photo(int $id): string
@@ -66,7 +83,7 @@ class PruneListingsTest extends ConsoleTestCase
     {
         $this->setting('flarum-classifieds.auto_prune_days', '30');
 
-        $this->runCommand(['command' => 'classifieds:prune']);
+        $this->prune(['command' => 'classifieds:prune']);
 
         // Only the sold listing untouched for 60 days goes; active ones never do.
         $this->assertSame([2, 3, 4], $this->remaining());
@@ -77,7 +94,7 @@ class PruneListingsTest extends ConsoleTestCase
     {
         $this->setting('flarum-classifieds.auto_prune_sold', '1');
 
-        $this->runCommand(['command' => 'classifieds:prune']);
+        $this->prune(['command' => 'classifieds:prune']);
 
         $this->assertSame([3], $this->remaining());
     }
@@ -92,7 +109,7 @@ class PruneListingsTest extends ConsoleTestCase
             file_put_contents($this->photo($id), 'x');
         }
 
-        $this->runCommand(['command' => 'classifieds:prune']);
+        $this->prune(['command' => 'classifieds:prune']);
 
         $this->assertFileDoesNotExist($this->photo(1));
         $this->assertFileExists($this->photo(3), 'A listing that stays keeps its photos');
@@ -104,7 +121,7 @@ class PruneListingsTest extends ConsoleTestCase
     {
         $this->setting('flarum-classifieds.auto_prune_sold', '1');
 
-        $this->runCommand(['command' => 'classifieds:prune', '--dry-run' => true]);
+        $this->prune(['command' => 'classifieds:prune', '--dry-run' => true]);
 
         $this->assertSame([1, 2, 3, 4], $this->remaining());
     }
